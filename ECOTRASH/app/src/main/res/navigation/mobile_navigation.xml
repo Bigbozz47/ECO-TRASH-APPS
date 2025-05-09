@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.eco_trash.ui.NasabahBank.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.example.eco_trash.ui.NasabahBank.history.HistoryFragment"
+        android:label="@string/title_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.eco_trash.ui.NasabahBank.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/bantuanFragment"
+        android:name="com.example.eco_trash.ui.NasabahBank.bantuan.BantuanFragment"
+        android:label="@string/title_bantuan"
+        tools:layout="@layout/fragment_bantuan" />
+
+    <fragment
+        android:id="@+id/tukarPoinFragment"
+        android:name="com.example.eco_trash.ui.NasabahBank.tukarpoin.TukarPoinFragment"
+        android:label="Tukar Poin"
+        tools:layout="@layout/fragment_tukar_poin" />
+
+    <fragment
+        android:id="@+id/tukarTabunganFragment"
+        android:name="com.example.eco_trash.ui.NasabahBank.tukarpoin.TukarTabunganFragment"
+        android:label="Tukar Tabungan" />
+
+    <fragment
+        android:id="@+id/tukarBarangFragment"
+        android:name="com.example.eco_trash.ui.NasabahBank.tukarpoin.TukarBarangFragment"
+        android:label="Tukar Barang" />
+
+</navigation>
