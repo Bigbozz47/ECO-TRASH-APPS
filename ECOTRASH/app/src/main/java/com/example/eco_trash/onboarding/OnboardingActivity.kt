@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.eco_trash.LoginActivity
 import com.example.eco_trash.R
 import com.example.eco_trash.databinding.ActivityOnboardingBinding
 import com.example.eco_trash.main.MainActivity
@@ -81,7 +82,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun launchMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }

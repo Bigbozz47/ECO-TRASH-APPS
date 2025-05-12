@@ -1,8 +1,8 @@
+# models.py
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class User(AbstractUser):
-    # Override groups and user_permissions to avoid clash with auth.User
     groups = models.ManyToManyField(
         Group,
         related_name='api_user_groups',
@@ -23,10 +23,15 @@ class User(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='nasabah')
     poin = models.IntegerField(default=0)
     saldo = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    no_hp = models.CharField(max_length=20, blank=True, null=True)
+    alamat = models.TextField(blank=True, null=True)
+
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self):
         return f"{self.username} ({self.role})"
-
 
 class TrashPrice(models.Model):
     jenis = models.CharField(max_length=100)
@@ -36,7 +41,6 @@ class TrashPrice(models.Model):
 
     def __str__(self):
         return f"{self.jenis} - Rp{self.harga_per_kg}/kg"
-
 
 class Transaction(models.Model):
     STATUS_CHOICES = (
@@ -55,7 +59,6 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.jenis.jenis} - {self.status}"
 
-
 class PoinExchange(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='penukaran_poin')
     item = models.CharField(max_length=100)
@@ -65,7 +68,6 @@ class PoinExchange(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.item} ({self.poin_dipakai} poin)"
 
-
 class TransferSaldo(models.Model):
     pengirim = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transfer_keluar')
     penerima = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transfer_masuk')
@@ -74,7 +76,6 @@ class TransferSaldo(models.Model):
 
     def __str__(self):
         return f"{self.pengirim.username} -> {self.penerima.username} : Rp{self.jumlah}"
-
 
 class LaporanDownload(models.Model):
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='laporan_unduhan')

@@ -6,17 +6,93 @@
     android:background="@android:color/white"
     tools:context=".ui.home.HomeFragment">
 
+    <!-- Header Hijau -->
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/green_500"
+        android:padding="12dp">
+
+        <!-- Nama & Status -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delano Yusuf Habibie"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● Nasabah"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Notifikasi (kanan atas) -->
+        <RelativeLayout
+            android:id="@+id/notificationContainer"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp">
+
+            <ImageView
+                android:id="@+id/notification_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_notification"
+                android:background="@drawable/circle_background"
+                android:padding="6dp"
+                android:contentDescription="Notifikasi" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_red_dot" />
+        </RelativeLayout>
+
+        <!-- Foto Profil (sebelah kiri notifikasi) -->
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_toStartOf="@id/notificationContainer"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_profile"
+            android:background="@drawable/circle_background"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Profil" />
+    </RelativeLayout>
+
     <!-- Konten Scroll -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/header_container"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="16dp">
 
             <!-- Kartu Info Poin dan Tabungan -->
             <LinearLayout
@@ -25,7 +101,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/rounded_dark_card"
                 android:padding="20dp"
-                android:elevation="6dp">
+                android:elevation="6dp"
+                android:layout_marginTop="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -42,13 +119,13 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:text="@string/poin_anda"
+                            android:text="Poin Anda"
                             android:textColor="@android:color/white"
                             android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <TextView
-                            android:text="@string/_1500"
+                            android:text="1500"
                             android:textColor="@android:color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
@@ -64,13 +141,13 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:text="@string/tabungan_uang"
+                            android:text="Tabungan Uang"
                             android:textColor="@android:color/white"
                             android:textSize="14sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <TextView
-                            android:text="@string/rp_95_000"
+                            android:text="Rp 95.000"
                             android:textColor="@android:color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
@@ -90,10 +167,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/tukar_poin"
+                        android:text="TUKAR POIN"
                         android:backgroundTint="#28A745"
                         android:textColor="@color/black"
-                        android:drawablePadding="8dp" />
+                        android:textAllCaps="true" />
 
                     <Space
                         android:layout_width="16dp"
@@ -103,7 +180,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/transfer"
+                        android:text="Transfer"
                         android:textAllCaps="false"
                         android:backgroundTint="#FFD700"
                         android:textColor="#000000" />
@@ -131,10 +208,10 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_tracking"
-                        android:contentDescription="@string/pelacakan_sampah" />
+                        android:contentDescription="Pelacakan Sampah" />
 
                     <TextView
-                        android:text="@string/pelacakan_sampah"
+                        android:text="Pelacakan Sampah"
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:layout_width="wrap_content"
@@ -159,10 +236,10 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_price"
-                        android:contentDescription="@string/informasi_harga" />
+                        android:contentDescription="Informasi Harga" />
 
                     <TextView
-                        android:text="@string/informasi_harga"
+                        android:text="Informasi Harga"
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package com.example.eco_trash.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,6 @@ import com.example.eco_trash.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -23,17 +21,23 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val view = binding.root
 
+        val sharedPref = requireContext().getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
+        val username = sharedPref.getString("username", "Pengguna")
+        val role = sharedPref.getString("role", "-")
+
+        // Set text to header TextViews
+        binding.userName.text = username
+        binding.userStatus.text = "● ${role?.replace("_", " ")?.replaceFirstChar { it.uppercase() }}"
+
+        // Navigasi tombol Tukar Poin
         binding.menuTukarPoin.setOnClickListener {
             findNavController().navigate(R.id.tukarPoinFragment)
         }
 
-        return root
+        return view
     }
 
     override fun onDestroyView() {

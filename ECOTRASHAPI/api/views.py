@@ -1,14 +1,15 @@
 from rest_framework import generics, viewsets, permissions, status
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
+from rest_framework.views import APIView
+from ecotrash.firebase import db
 
-from .models import User, TrashPrice, Transaction, PoinExchange, TransferSaldo, LaporanDownload
 from .serializers import (
     RegisterSerializer, UserSerializer, NasabahListSerializer,
     TransactionCreateSerializer, TransactionDetailSerializer,
@@ -16,6 +17,7 @@ from .serializers import (
     TransactionSummaryJenisSerializer, TransactionSummaryBulananSerializer,
     PoinExchangeSerializer, TransferSaldoSerializer, LaporanDownloadSerializer
 )
+from .models import User, TrashPrice, Transaction, LaporanDownload
 from .permissions import IsAdmin, IsNasabah
 
 # Auth Views
@@ -31,7 +33,20 @@ class RegisterView(generics.CreateAPIView):
         responses={201: UserSerializer, 400: 'Bad Request'}
     )
     def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            db.collection('users').document(user.email).set({
+                'username': user.username,
+                'email': user.email,
+                'role': user.role,
+                'no_hp': user.no_hp,
+                'alamat': user.alamat,
+                'poin': user.poin,
+                'saldo': float(user.saldo),
+            })
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(TokenObtainPairView):
     """Endpoint: POST /api/login/ — JWT login."""
@@ -51,18 +66,55 @@ class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+class MeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        email = request.user.email
+        user_ref = db.collection('users').document(email)
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            return Response(user_doc.to_dict())
+        return Response({'error': 'User not found in Firestore'}, status=404)
+
+class ProfileUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_summary="Update Profil Pengguna",
+        operation_description="Mengupdate informasi user yang sedang login dan sinkronisasi ke Firestore.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['no_hp', 'alamat'],
+            properties={
+                'no_hp': openapi.Schema(type=openapi.TYPE_STRING),
+                'alamat': openapi.Schema(type=openapi.TYPE_STRING),
+            }
+        ),
+        responses={200: UserSerializer, 400: 'Bad Request'}
+    )
+    def put(self, request):
+        user = request.user
+        no_hp = request.data.get('no_hp')
+        alamat = request.data.get('alamat')
+        if not no_hp or not alamat:
+            return Response({'error': 'no_hp dan alamat wajib diisi'}, status=400)
+        user.no_hp = no_hp
+        user.alamat = alamat
+        user.save()
+        db.collection('users').document(user.email).update({
+            'no_hp': no_hp,
+            'alamat': alamat
+        })
+        return Response(UserSerializer(user).data, status=200)
+
 # Transaction Views
 class SetorSampahView(generics.CreateAPIView):
     """Endpoint: POST /api/setor/ — Nasabah setor sampah."""
     serializer_class = TransactionCreateSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
-    @swagger_auto_schema(
-        operation_summary="Setor Sampah",
-        operation_description="Nasabah kirim jenis & berat, server hitung poin & nilai, status pending.",
-        request_body=TransactionCreateSerializer,
-        responses={201: TransactionDetailSerializer, 400: 'Bad Request', 401: 'Unauthorized'}
-    )
+    @swagger_auto_schema(...)
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
@@ -72,11 +124,7 @@ class ValidasiSetoranView(generics.GenericAPIView):
     serializer_class = TransactionDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="Validasi Setoran",
-        operation_description="Admin setujui setoran, update poin & saldo nasabah.",
-        responses={200: TransactionDetailSerializer, 403: 'Forbidden', 404: 'Not Found'}
-    )
+    @swagger_auto_schema(...)
     def post(self, request, *args, **kwargs):
         trans = self.get_object()
         nilai = trans.berat * trans.jenis.harga_per_kg
@@ -90,48 +138,51 @@ class ValidasiSetoranView(generics.GenericAPIView):
         user.poin += poin
         user.saldo += nilai
         user.save()
+
+        # Backup ke Firestore
+        db.collection('transactions').document(str(trans.id)).set({
+            'user': user.username,
+            'email': user.email,
+            'jenis': trans.jenis.jenis,
+            'berat': float(trans.berat),
+            'nilai_transaksi': float(trans.nilai_transaksi),
+            'poin': trans.poin,
+            'status': trans.status,
+            'tanggal': trans.tanggal.isoformat(),
+            'divalidasi_oleh': request.user.username
+        })
+
         return Response(self.get_serializer(trans).data)
 
-# Price Views
+# Harga Sampah Views
 class HargaViewSet(viewsets.ModelViewSet):
     """Endpoint: /api/harga/ — CRUD harga sampah (Admin)."""
     queryset = TrashPrice.objects.all()
     serializer_class = TrashPriceSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="List Harga",
-        operation_description="List semua data harga sampah (aktif & non-aktif).",
-        responses={200: TrashPriceSerializer(many=True)}
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        db.collection('trash_prices').document(str(instance.id)).set({
+            'jenis': instance.jenis,
+            'harga_per_kg': float(instance.harga_per_kg),
+            'is_active': instance.is_active,
+            'tanggal_diperbarui': instance.tanggal_diperbarui.isoformat(),
+        })
 
-    @swagger_auto_schema(
-        operation_summary="Buat Harga",
-        operation_description="Admin tambah jenis baru dengan harga per kg.",
-        request_body=TrashPriceSerializer,
-        responses={201: TrashPriceSerializer, 400: 'Bad Request'}
-    )
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        db.collection('trash_prices').document(str(instance.id)).update({
+            'jenis': instance.jenis,
+            'harga_per_kg': float(instance.harga_per_kg),
+            'is_active': instance.is_active,
+            'tanggal_diperbarui': instance.tanggal_diperbarui.isoformat(),
+        })
 
-    @swagger_auto_schema(
-        operation_summary="Update Harga",
-        operation_description="Admin ubah detail harga sampah tertentu.",
-        request_body=TrashPriceSerializer,
-        responses={200: TrashPriceSerializer, 404: 'Not Found'}
-    )
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+    def perform_destroy(self, instance):
+        db.collection('trash_prices').document(str(instance.id)).delete()
+        instance.delete()
 
-    @swagger_auto_schema(
-        operation_summary="Hapus Harga",
-        operation_description="Admin hapus data harga sampah.",
-        responses={204: 'No Content', 404: 'Not Found'}
-    )
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
 
 class HargaAktifView(generics.ListAPIView):
     """Endpoint: GET /api/harga-aktif/ — List harga aktif."""
@@ -139,118 +190,63 @@ class HargaAktifView(generics.ListAPIView):
     serializer_class = ActiveTrashPriceSerializer
     permission_classes = [permissions.AllowAny]
 
-    @swagger_auto_schema(
-        operation_summary="Harga Aktif",
-        operation_description="Tampilkan hanya harga sampah yang aktif.",
-        responses={200: ActiveTrashPriceSerializer(many=True)}
-    )
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-# Transaction History & Summary
+# Riwayat Transaksi dan Statistik
 class RiwayatTransaksiView(generics.ListAPIView):
     """Endpoint: GET /api/transaksi/ — Riwayat transaksi."""
     serializer_class = TransactionDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @swagger_auto_schema(
-        operation_summary="Riwayat Transaksi",
-        operation_description="List riwayat transaksi untuk nasabah atau semua untuk admin.",
-        responses={200: TransactionDetailSerializer(many=True)}
-    )
     def get_queryset(self):
         user = self.request.user
-        qs = Transaction.objects.filter(user=user) if user.role=='nasabah' else Transaction.objects.all()
-        return qs
+        return Transaction.objects.filter(user=user) if user.role == 'nasabah' else Transaction.objects.all()
 
 class RingkasanJenisView(generics.GenericAPIView):
     """Endpoint: GET /api/ringkasan-jenis/ — Statistik per jenis."""
     serializer_class = TransactionSummaryJenisSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="Ringkasan per Jenis",
-        operation_description="Total berat transaksi seluru jenis (status selesai).",
-        responses={200: TransactionSummaryJenisSerializer(many=True)}
-    )
     def get(self, request, *args, **kwargs):
         data = Transaction.objects.filter(status='selesai')\
-            .values(jenis=openapi.Schema(type=openapi.TYPE_STRING))\
+            .values('jenis__jenis')\
             .annotate(total=Sum('berat'))
-        serializer = self.get_serializer(data, many=True)
-        return Response(serializer.data)
+        return Response(data)
 
 class RingkasanBulananView(generics.GenericAPIView):
     """Endpoint: GET /api/ringkasan-bulanan/ — Statistik bulanan."""
     serializer_class = TransactionSummaryBulananSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="Ringkasan Bulanan",
-        operation_description="Total berat transaksi per bulan.",
-        responses={200: TransactionSummaryBulananSerializer(many=True)}
-    )
     def get(self, request, *args, **kwargs):
         qs = Transaction.objects.annotate(month=TruncMonth('tanggal'))
-        data = qs.values(month=openapi.Schema(type=openapi.FORMAT_DATE))\
-            .annotate(total=Sum('berat'))
-        serializer = self.get_serializer(data, many=True)
-        return Response(serializer.data)
+        data = qs.values('month').annotate(total=Sum('berat'))
+        return Response(data)
 
-# Nasabah List
+# Nasabah
 class NasabahListView(generics.ListAPIView):
     """Endpoint: GET /api/nasabah/ — List semua nasabah."""
     serializer_class = NasabahListSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="Daftar Nasabah",
-        operation_description="List semua user dengan role nasabah.",
-        responses={200: NasabahListSerializer(many=True)}
-    )
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def get_queryset(self):
+        return User.objects.filter(role='nasabah')
 
-# Poin & Saldo Transactions
+# Poin dan Saldo
 class TukarPoinView(generics.CreateAPIView):
     """Endpoint: POST /api/tukar-poin/ — Nasabah tukar poin."""
     serializer_class = PoinExchangeSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
-
-    @swagger_auto_schema(
-        operation_summary="Tukar Poin",
-        operation_description="Nasabah tukar poin ke item tertentu.",
-        request_body=PoinExchangeSerializer,
-        responses={201: PoinExchangeSerializer, 400: 'Bad Request'}
-    )
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
 
 class TransferSaldoView(generics.CreateAPIView):
     """Endpoint: POST /api/transfer/ — Nasabah transfer saldo."""
     serializer_class = TransferSaldoSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
-    @swagger_auto_schema(
-        operation_summary="Transfer Saldo",
-        operation_description="Nasabah transfer saldo ke nasabah lain.",
-        request_body=TransferSaldoSerializer,
-        responses={201: TransferSaldoSerializer, 400: 'Bad Request'}
-    )
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
-# Laporan PDF
+# Laporan
 class ExportLaporanView(generics.GenericAPIView):
     """Endpoint: GET /api/export-laporan/ — Admin download laporan PDF."""
     serializer_class = LaporanDownloadSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(
-        operation_summary="Export Laporan",
-        operation_description="Admin mengunduh laporan transaksi dalam format PDF.",
-        responses={200: 'PDF file', 403: 'Forbidden'}
-    )
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="laporan.pdf"'
@@ -258,5 +254,14 @@ class ExportLaporanView(generics.GenericAPIView):
         p.drawString(100, 800, "Laporan Transaksi Eco Trash")
         p.showPage()
         p.save()
-        LaporanDownload.objects.create(admin=request.user, file_path='laporan.pdf')
+        log = LaporanDownload.objects.create(admin=request.user, file_path='laporan.pdf')
+
+        # Simpan log laporan ke Firestore
+        db.collection('laporan_downloads').document(str(log.id)).set({
+            'admin': request.user.username,
+            'file_path': log.file_path,
+            'tanggal_unduh': log.tanggal_unduh.isoformat()
+        })
+
         return response
+

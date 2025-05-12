@@ -6,7 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.eco_trash_bank.R
 import com.example.eco_trash_bank.databinding.ActivityOnboardingBinding
-import com.example.eco_trash_bank.main.MainActivity
+import com.example.eco_trash_bank.onboarding.FadeSlidePageTransformer
+import com.example.eco_trash_bank.onboarding.OnboardingAdapter
+import com.example.eco_trash_bank.onboarding.OnboardingItem
+import com.example.eco_trash_bank.LoginActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class OnboardingActivity : AppCompatActivity() {
@@ -81,7 +84,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun launchMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }

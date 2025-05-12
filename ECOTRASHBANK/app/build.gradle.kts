@@ -42,6 +42,7 @@ dependencies {
     // <-- Harus pakai string literal
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.android.material:material:1.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Dependensi via version catalog (libs.*) tetap sama
     implementation(libs.androidx.core.ktx)

@@ -1,0 +1,14 @@
+# Cache, pyc, venv
+__pycache__/
+*.py[cod]
+*.sqlite3
+venv/
+*.log
+
+# IDE/Editor config
+.vscode/
+.idea/
+
+# Abaikan file kredensial dan konfigurasi rahasia
+firebase-service-account.json
+.env

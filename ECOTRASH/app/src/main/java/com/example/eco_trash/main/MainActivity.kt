@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+
         binding.navView.setupWithNavController(navController)
 
         // Navigasi ke BantuanFragment saat FAB ditekan
