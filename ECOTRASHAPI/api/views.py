@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from rest_framework.views import APIView
 from ecotrash.firebase import db
+from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import (
     RegisterSerializer, UserSerializer, NasabahListSerializer,
@@ -20,15 +21,13 @@ from .serializers import (
 from .models import User, TrashPrice, Transaction, LaporanDownload
 from .permissions import IsAdmin, IsNasabah
 
-# Auth Views
+# === AUTHENTICATION ===
 class RegisterView(generics.CreateAPIView):
-    """Endpoint: POST /api/register/ — Registrasi user baru."""
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(
         operation_summary="Registrasi User",
-        operation_description="Buat user baru dengan username/password/role.",
         request_body=RegisterSerializer,
         responses={201: UserSerializer, 400: 'Bad Request'}
     )
@@ -49,12 +48,10 @@ class RegisterView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(TokenObtainPairView):
-    """Endpoint: POST /api/login/ — JWT login."""
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(
         operation_summary="Login User",
-        operation_description="Dapatkan access & refresh JWT token.",
         responses={200: openapi.Response('Tokens', schema=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -82,7 +79,6 @@ class ProfileUpdateView(APIView):
 
     @swagger_auto_schema(
         operation_summary="Update Profil Pengguna",
-        operation_description="Mengupdate informasi user yang sedang login dan sinkronisasi ke Firestore.",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             required=['no_hp', 'alamat'],
@@ -108,23 +104,41 @@ class ProfileUpdateView(APIView):
         })
         return Response(UserSerializer(user).data, status=200)
 
-# Transaction Views
+class DetailNasabahByEmailView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def get(self, request, email):
+        user_ref = db.collection('users').document(email)
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            return Response(user_doc.to_dict())
+        return Response({'error': 'Nasabah tidak ditemukan di Firestore'}, status=404)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated, IsAdmin])
+def list_nasabah(request):
+    user_docs = db.collection('users').stream()
+    nasabah_list = []
+    for doc in user_docs:
+        data = doc.to_dict()
+        if data.get('role') == 'nasabah':
+            nasabah_list.append({
+                'username': data.get('username'),
+                'email': data.get('email'),
+                'profile_image_url': data.get('profile_image_url', '')
+            })
+    return Response(nasabah_list)
+
+# === TRANSAKSI DAN VALIDASI ===
 class SetorSampahView(generics.CreateAPIView):
-    """Endpoint: POST /api/setor/ — Nasabah setor sampah."""
     serializer_class = TransactionCreateSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
-    @swagger_auto_schema(...)
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
 class ValidasiSetoranView(generics.GenericAPIView):
-    """Endpoint: POST /api/validasi-setor/{pk}/ — Admin validasi setoran."""
     queryset = Transaction.objects.filter(status='pending')
     serializer_class = TransactionDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
-    @swagger_auto_schema(...)
     def post(self, request, *args, **kwargs):
         trans = self.get_object()
         nilai = trans.berat * trans.jenis.harga_per_kg
@@ -139,7 +153,6 @@ class ValidasiSetoranView(generics.GenericAPIView):
         user.saldo += nilai
         user.save()
 
-        # Backup ke Firestore
         db.collection('transactions').document(str(trans.id)).set({
             'user': user.username,
             'email': user.email,
@@ -154,9 +167,8 @@ class ValidasiSetoranView(generics.GenericAPIView):
 
         return Response(self.get_serializer(trans).data)
 
-# Harga Sampah Views
+# === HARGA SAMPAH ===
 class HargaViewSet(viewsets.ModelViewSet):
-    """Endpoint: /api/harga/ — CRUD harga sampah (Admin)."""
     queryset = TrashPrice.objects.all()
     serializer_class = TrashPriceSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
@@ -183,16 +195,13 @@ class HargaViewSet(viewsets.ModelViewSet):
         db.collection('trash_prices').document(str(instance.id)).delete()
         instance.delete()
 
-
 class HargaAktifView(generics.ListAPIView):
-    """Endpoint: GET /api/harga-aktif/ — List harga aktif."""
     queryset = TrashPrice.objects.filter(is_active=True)
     serializer_class = ActiveTrashPriceSerializer
     permission_classes = [permissions.AllowAny]
 
-# Riwayat Transaksi dan Statistik
+# === RINGKASAN & RIWAYAT ===
 class RiwayatTransaksiView(generics.ListAPIView):
-    """Endpoint: GET /api/transaksi/ — Riwayat transaksi."""
     serializer_class = TransactionDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -201,18 +210,14 @@ class RiwayatTransaksiView(generics.ListAPIView):
         return Transaction.objects.filter(user=user) if user.role == 'nasabah' else Transaction.objects.all()
 
 class RingkasanJenisView(generics.GenericAPIView):
-    """Endpoint: GET /api/ringkasan-jenis/ — Statistik per jenis."""
     serializer_class = TransactionSummaryJenisSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
-        data = Transaction.objects.filter(status='selesai')\
-            .values('jenis__jenis')\
-            .annotate(total=Sum('berat'))
+        data = Transaction.objects.filter(status='selesai')            .values('jenis__jenis')            .annotate(total=Sum('berat'))
         return Response(data)
 
 class RingkasanBulananView(generics.GenericAPIView):
-    """Endpoint: GET /api/ringkasan-bulanan/ — Statistik bulanan."""
     serializer_class = TransactionSummaryBulananSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
@@ -221,29 +226,23 @@ class RingkasanBulananView(generics.GenericAPIView):
         data = qs.values('month').annotate(total=Sum('berat'))
         return Response(data)
 
-# Nasabah
+# === LAINNYA ===
 class NasabahListView(generics.ListAPIView):
-    """Endpoint: GET /api/nasabah/ — List semua nasabah."""
     serializer_class = NasabahListSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
     def get_queryset(self):
         return User.objects.filter(role='nasabah')
 
-# Poin dan Saldo
 class TukarPoinView(generics.CreateAPIView):
-    """Endpoint: POST /api/tukar-poin/ — Nasabah tukar poin."""
     serializer_class = PoinExchangeSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
 class TransferSaldoView(generics.CreateAPIView):
-    """Endpoint: POST /api/transfer/ — Nasabah transfer saldo."""
     serializer_class = TransferSaldoSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
-# Laporan
 class ExportLaporanView(generics.GenericAPIView):
-    """Endpoint: GET /api/export-laporan/ — Admin download laporan PDF."""
     serializer_class = LaporanDownloadSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
@@ -256,7 +255,6 @@ class ExportLaporanView(generics.GenericAPIView):
         p.save()
         log = LaporanDownload.objects.create(admin=request.user, file_path='laporan.pdf')
 
-        # Simpan log laporan ke Firestore
         db.collection('laporan_downloads').document(str(log.id)).set({
             'admin': request.user.username,
             'file_path': log.file_path,
@@ -264,4 +262,3 @@ class ExportLaporanView(generics.GenericAPIView):
         })
 
         return response
-

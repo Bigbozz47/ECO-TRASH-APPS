@@ -5,21 +5,72 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/navigation_home">
 
-<fragment
-android:id="@+id/navigation_home"
-android:name="com.example.eco_trash_bank.ui.home.HomeFragment"
-android:label="Home"
-tools:layout="@layout/fragment_home" />
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.eco_trash_bank.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
 
-<fragment
-android:id="@+id/navigation_dashboard"
-android:name="com.example.eco_trash_bank.ui.dashboard.DashboardFragment"
-android:label="Dashboard"
-tools:layout="@layout/fragment_dashboard" />
+    <!-- Validation Fragment -->
+    <fragment
+        android:id="@+id/navigation_validation"
+        android:name="com.example.eco_trash_bank.ui.validation.ValidationFragment"
+        android:label="Validation"
+        tools:layout="@layout/fragment_validation" />
 
-<fragment
-android:id="@+id/navigation_notifications"
-android:name="com.example.eco_trash_bank.ui.notifications.NotificationsFragment"
-android:label="Notifications"
-tools:layout="@layout/fragment_notifications" />
-    </navigation>
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.eco_trash_bank.ui.proflle.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <!-- Info Harga Fragment -->
+    <fragment
+        android:id="@+id/InfoHargaFragment"
+        android:name="com.example.eco_trash_bank.ui.info_harga.InfoHargaFragment"
+        android:label="Info Harga"
+        tools:layout="@layout/fragment_info_harga" />
+
+    <!-- Laporan Sampah Fragment -->
+    <fragment
+        android:id="@+id/LaporanSampahFragment"
+        android:name="com.example.eco_trash_bank.ui.laporan.LaporanSampahFragment"
+        android:label="Laporan Sampah"
+        tools:layout="@layout/fragment_laporan_sampah" />
+
+    <!-- List Nasabah Fragment -->
+    <fragment
+        android:id="@+id/ListNasabahFragment"
+        android:name="com.example.eco_trash_bank.ui.list_nasabah.ListNasabahFragment"
+        android:label="List Nasabah"
+        tools:layout="@layout/fragment_list_nasabah">
+
+        <action
+            android:id="@+id/action_list_to_info"
+            app:destination="@id/InfoNasabahFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+
+            <argument
+                android:name="email"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <!-- Info Nasabah Fragment -->
+    <fragment
+        android:id="@+id/InfoNasabahFragment"
+        android:name="com.example.eco_trash_bank.ui.info_nasabah.InfoNasabahFragment"
+        android:label="Info Nasabah"
+        tools:layout="@layout/fragment_info_nasabah">
+
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

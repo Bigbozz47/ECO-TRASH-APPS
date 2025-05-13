@@ -1,4 +1,4 @@
-package com.example.eco_trash_bank.ui.home
+package com.example.eco_trash_bank.ui.laporan
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.eco_trash_bank.R
-import com.example.eco_trash_bank.databinding.FragmentHomeBinding
-import okhttp3.*
+import com.example.eco_trash_bank.databinding.FragmentLaporanSampahBinding
+import okhttp3.OkHttpClient
 
+class LaporanSampahFragment : Fragment() {
 
-
-class HomeFragment : Fragment() {
-
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentLaporanSampahBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
 
@@ -25,8 +21,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        _binding = FragmentLaporanSampahBinding.inflate(inflater, container, false)
+        val viewModel = ViewModelProvider(this)[LaporanSampahViewModel::class.java]
 
         // Observasi LiveData
         viewModel.username.observe(viewLifecycleOwner) {
@@ -45,20 +41,6 @@ class HomeFragment : Fragment() {
 
         // Panggil API
         viewModel.fetchUserProfile(requireContext())
-
-        binding.btnInfoNasabah.setOnClickListener {
-            findNavController().navigate(R.id.ListNasabahFragment) // GANTI: dari InfoNasabahFragment → ListNasabahFragment
-        }
-
-
-        binding.btnLaporanSampah.setOnClickListener {
-            findNavController().navigate(R.id.LaporanSampahFragment)
-        }
-
-        binding.btnEditHarga.setOnClickListener {
-            findNavController().navigate(R.id.InfoHargaFragment)
-        }
-
 
         return binding.root
     }

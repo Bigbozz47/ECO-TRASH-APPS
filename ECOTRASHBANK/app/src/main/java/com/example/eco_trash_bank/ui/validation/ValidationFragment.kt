@@ -1,4 +1,5 @@
-package com.example.eco_trash_bank.ui.home
+package com.example.eco_trash_bank.ui.validation
+
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.eco_trash_bank.R
-import com.example.eco_trash_bank.databinding.FragmentHomeBinding
-import okhttp3.*
+import com.example.eco_trash_bank.databinding.FragmentValidationBinding
+import okhttp3.OkHttpClient
 
 
+class ValidationFragment : Fragment() {
 
-class HomeFragment : Fragment() {
-
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentValidationBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
 
@@ -25,10 +23,10 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        _binding = FragmentValidationBinding.inflate(inflater, container, false)
+        val viewModel = ViewModelProvider(this)[ValidationViewModel::class.java]
 
-        // Observasi LiveData
+        // Observasi hasil fetch
         viewModel.username.observe(viewLifecycleOwner) {
             binding.userName.text = it
         }
@@ -43,22 +41,8 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Panggil API
+        // Panggil fungsi ambil data user
         viewModel.fetchUserProfile(requireContext())
-
-        binding.btnInfoNasabah.setOnClickListener {
-            findNavController().navigate(R.id.ListNasabahFragment) // GANTI: dari InfoNasabahFragment → ListNasabahFragment
-        }
-
-
-        binding.btnLaporanSampah.setOnClickListener {
-            findNavController().navigate(R.id.LaporanSampahFragment)
-        }
-
-        binding.btnEditHarga.setOnClickListener {
-            findNavController().navigate(R.id.InfoHargaFragment)
-        }
-
 
         return binding.root
     }

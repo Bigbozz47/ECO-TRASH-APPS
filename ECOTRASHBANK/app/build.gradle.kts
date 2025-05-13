@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.navigation.safe.args)
 }
 
 android {
@@ -43,6 +44,7 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.google.android.material:material:1.10.0")
 
     // Dependensi via version catalog (libs.*) tetap sama
     implementation(libs.androidx.core.ktx)

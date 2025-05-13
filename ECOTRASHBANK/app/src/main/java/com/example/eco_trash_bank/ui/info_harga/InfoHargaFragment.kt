@@ -1,4 +1,4 @@
-package com.example.eco_trash_bank.ui.home
+package com.example.eco_trash_bank.ui.info_harga
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.eco_trash_bank.R
-import com.example.eco_trash_bank.databinding.FragmentHomeBinding
-import okhttp3.*
+import com.example.eco_trash_bank.databinding.FragmentInfoHargaBinding
+import com.example.eco_trash_bank.ui.laporan.InfoHargaViewModel
+import okhttp3.OkHttpClient
 
+class InfoHargaFragment : Fragment() {
 
-
-class HomeFragment : Fragment() {
-
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentInfoHargaBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
 
@@ -25,8 +22,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        _binding = FragmentInfoHargaBinding.inflate(inflater, container, false)
+        val viewModel = ViewModelProvider(this)[InfoHargaViewModel::class.java]
 
         // Observasi LiveData
         viewModel.username.observe(viewLifecycleOwner) {
@@ -45,20 +42,6 @@ class HomeFragment : Fragment() {
 
         // Panggil API
         viewModel.fetchUserProfile(requireContext())
-
-        binding.btnInfoNasabah.setOnClickListener {
-            findNavController().navigate(R.id.ListNasabahFragment) // GANTI: dari InfoNasabahFragment → ListNasabahFragment
-        }
-
-
-        binding.btnLaporanSampah.setOnClickListener {
-            findNavController().navigate(R.id.LaporanSampahFragment)
-        }
-
-        binding.btnEditHarga.setOnClickListener {
-            findNavController().navigate(R.id.InfoHargaFragment)
-        }
-
 
         return binding.root
     }

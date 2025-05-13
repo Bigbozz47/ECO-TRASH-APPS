@@ -104,16 +104,189 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Tambahkan konten lainnya di sini -->
-
-            <TextView
-                android:id="@+id/tvPlaceholder"
-                android:layout_width="wrap_content"
+            <!-- Kartu Info Poin dan Tabungan -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Konten utama di sini"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_gravity="center" />
+                android:orientation="vertical"
+                android:background="@drawable/rounded_dark_card"
+                android:padding="20dp"
+                android:elevation="6dp"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Ikon Sampah -->
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/outline_delete_24"
+                        android:background="@drawable/circle_background"
+                        android:padding="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Icon Sampah" />
+
+                    <!-- Teks -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:text="Jumlah Sampah Terkumpul"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tvPoin"
+                            android:text="2570 kg"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Menu Utama -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <!-- Laporan Sampah -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnLaporanSampah"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/black"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/outline_add_chart_24"
+                            android:contentDescription="Lihat Laporan Transaksi" />
+
+                        <TextView
+                            android:text="Laporan Sampah"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Edit Harga -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnEditHarga"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/black"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_price"
+                            android:contentDescription="Informasi Harga" />
+
+                        <TextView
+                            android:text="Edit Informasi Harga"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Baris 2: Info Nasabah di Tengah -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="12dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnInfoNasabah"
+                    android:layout_width="180dp"
+                    android:layout_height="120dp"
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/black"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/baseline_info_outline_24"
+                            android:contentDescription="Info Nasabah" />
+
+                        <TextView
+                            android:text="Info Nasabah"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

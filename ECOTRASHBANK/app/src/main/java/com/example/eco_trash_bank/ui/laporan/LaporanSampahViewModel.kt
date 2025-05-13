@@ -1,4 +1,4 @@
-package com.example.eco_trash_bank.ui.home
+package com.example.eco_trash_bank.ui.laporan
 
 import android.content.Context
 import android.util.Log
@@ -9,7 +9,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
-class HomeViewModel : ViewModel() {
+class LaporanSampahViewModel : ViewModel() {
 
     private val client = OkHttpClient()
 
