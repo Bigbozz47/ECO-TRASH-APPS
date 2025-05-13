@@ -2,16 +2,22 @@ package com.example.eco_trash_bank.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eco_trash_bank.databinding.FragmentHomeBinding
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val client = OkHttpClient()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,16 +25,56 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
 
+        fetchUserProfile()
+
+        return binding.root
+    }
+
+    private fun fetchUserProfile() {
         val sharedPref = requireContext().getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("username", "Pengguna")
-        val role = sharedPref.getString("role", "nasabah")
+        val token = sharedPref.getString("access_token", null)
 
-        binding.userName.text = username
-        binding.userStatus.text = "• ${role?.replace('_', ' ')?.replaceFirstChar { it.uppercase() }}"
+        Log.d("DEBUG_TOKEN", "Token: $token")
 
-        return view
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Token tidak ditemukan", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val request = Request.Builder()
+            .url("http://10.0.2.2:8000/api/me/")
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), "Gagal koneksi: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val bodyString = response.body?.string()
+                Log.d("DEBUG_FIRESTORE_BODY", bodyString ?: "null")
+
+                if (!response.isSuccessful || bodyString == null) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(requireContext(), "Gagal memuat profil", Toast.LENGTH_SHORT).show()
+                    }
+                    return
+                }
+
+                val json = JSONObject(bodyString)
+                val username = json.optString("username", "Pengguna")
+                val role = json.optString("role", "nasabah")
+
+                activity?.runOnUiThread {
+                    binding.userName.text = username
+                    binding.userStatus.text = "• ${role.replaceFirstChar { it.uppercase() }}"
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {

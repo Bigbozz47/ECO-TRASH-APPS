@@ -33,9 +33,6 @@ class MainActivity : AppCompatActivity() {
                     R.id.navigation_notifications
                 )
             )
-            val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-            setSupportActionBar(toolbar)
-            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
 
             Log.d("MainActivity", "Navigasi berhasil diinisialisasi")
