@@ -63,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
         val body = json.toString().toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:8000/api/register/")
+            .url("http://192.168.18.10:8000/api/register/")
             .post(body)
             .build()
 

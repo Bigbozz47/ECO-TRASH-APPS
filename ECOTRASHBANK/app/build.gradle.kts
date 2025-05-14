@@ -45,6 +45,8 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.google.android.material:material:1.10.0")
+    implementation ("com.itextpdf:itextpdf:5.5.13.3")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.0.3")
 
     // Dependensi via version catalog (libs.*) tetap sama
     implementation(libs.androidx.core.ktx)

@@ -19,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Nama & Status -->
         <LinearLayout
             android:id="@+id/user_info_container"
             android:layout_width="wrap_content"
@@ -47,7 +46,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Notifikasi (kanan atas) -->
         <RelativeLayout
             android:id="@+id/notificationContainer"
             android:layout_width="36dp"
@@ -73,7 +71,6 @@
                 android:background="@drawable/circle_red_dot" />
         </RelativeLayout>
 
-        <!-- Foto Profil (sebelah kiri notifikasi) -->
         <ImageView
             android:id="@+id/user_image"
             android:layout_width="36dp"
@@ -88,12 +85,23 @@
             android:contentDescription="Profil" />
     </RelativeLayout>
 
-    <!-- Konten ScrollView Placeholder -->
+    <!-- Loading Indicator -->
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/header_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Scrollable Konten -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/header_container"
+        app:layout_constraintTop_toBottomOf="@id/loadingIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -104,16 +112,66 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Tambahkan konten lainnya di sini -->
-
+            <!-- Grafik Bar -->
             <TextView
-                android:id="@+id/tvPlaceholder"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Konten Laporan Sampah disini "
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_gravity="center" />
+                android:text="Ringkasan Jenis Sampah"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="8dp" />
+
+            <!-- Grafik Line -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ringkasan Bulanan"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="8dp" />
+
+            <!-- Tabel Riwayat Transaksi -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Riwayat Transaksi Nasabah"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/riwayatRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <!-- Tombol PDF Backend -->
+            <Button
+                android:id="@+id/btnGeneratePdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Download Laporan PDF"
+                android:layout_marginTop="24dp" />
+
+            <!-- Tombol PDF Grafik -->
+            <Button
+                android:id="@+id/btnExportChartPdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Download Grafik ke PDF"
+                android:layout_marginTop="12dp" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

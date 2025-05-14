@@ -1,6 +1,7 @@
 package com.example.eco_trash_bank.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,16 +48,15 @@ class HomeFragment : Fragment() {
         viewModel.fetchUserProfile(requireContext())
 
         binding.btnInfoNasabah.setOnClickListener {
-            findNavController().navigate(R.id.ListNasabahFragment) // GANTI: dari InfoNasabahFragment → ListNasabahFragment
+            findNavController().navigate(R.id.navigation_list_nasabah)
         }
 
-
         binding.btnLaporanSampah.setOnClickListener {
-            findNavController().navigate(R.id.LaporanSampahFragment)
+            findNavController().navigate(R.id.navigation_laporan_sampah)
         }
 
         binding.btnEditHarga.setOnClickListener {
-            findNavController().navigate(R.id.InfoHargaFragment)
+            findNavController().navigate(R.id.navigation_info_harga)
         }
 
 

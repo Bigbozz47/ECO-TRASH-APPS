@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.proflle.ProfileFragment">
+    android:layout_height="match_parent">
 
     <!-- Header Hijau -->
     <RelativeLayout
@@ -86,7 +85,7 @@
             android:contentDescription="Profil" />
     </RelativeLayout>
 
-    <!-- Konten ScrollView Placeholder -->
+    <!-- Konten scroll -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -100,18 +99,121 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-            <!-- Tambahkan konten lainnya di sini -->
+            <!-- Foto Profil -->
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/sample_profile"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_background"
+                android:padding="4dp" />
 
+            <!-- Nama -->
             <TextView
-                android:id="@+id/tvPlaceholder"
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Konten Profile di sini"
+                android:text="Ecotrash"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="#000000" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ecotrash@gmail.com"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_gravity="center" />
+                android:textColor="#888888" />
+
+            <!-- No HP -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_phone" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvPhoneLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nomor Handphone"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0822-2222-2222"
+                        android:textSize="16sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Alamat -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvAddressLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Alamat"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jalan Prof. Dr. Hamka, Air Tawar Padang"
+                        android:textSize="16sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Tombol Ubah -->
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubah Profil"
+                android:layout_marginTop="32dp" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
         val body = json.toString().toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:8000/api/login/") // atau IP lokal jika pakai HP fisik maksudnya ip laptop tapi satu wifie,cek ipconfig di laptop dan lihat ipv4 nya copy dan masukkan ke file network_security_config.xml dan ganti juga disini
+            .url("http://192.168.18.10:8000/api/login/") // atau IP lokal jika pakai HP fisik maksudnya ip laptop tapi satu wifie,cek ipconfig di laptop dan lihat ipv4 nya copy dan masukkan ke file network_security_config.xml dan ganti juga disini
             .post(body)
             .build()
 

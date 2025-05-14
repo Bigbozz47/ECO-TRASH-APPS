@@ -6,14 +6,27 @@ from drf_yasg import openapi
 from rest_framework import permissions
 
 from .views import (
+    # Auth & Profile
     RegisterView, LoginView, MeView, ProfileUpdateView,
-    SetorSampahView, ValidasiSetoranView,
-    HargaViewSet, HargaAktifView, RiwayatTransaksiView,
-    RingkasanJenisView, RingkasanBulananView, NasabahListView,
-    TukarPoinView, TransferSaldoView, ExportLaporanView,
-    DetailNasabahByEmailView, list_nasabah
+
+    # Nasabah
+    list_nasabah, DetailNasabahByEmailView, NasabahListView,
+
+    # Transaksi & Validasi
+    SetorSampahView, ValidasiSetoranView, DaftarSetoranBelumValidView, RiwayatTransaksiView,
+
+    # Harga Sampah
+    HargaViewSet, HargaAktifView,
+
+    # Ringkasan & Laporan
+    RingkasanJenisView, RingkasanBulananView, RingkasanNasabahView,
+    ExportLaporanView, LaporanDownloadListView,
+
+    # Poin & Transfer
+    TukarPoinView, TransferSaldoView,
 )
 
+# Swagger/OpenAPI documentation config
 schema_view = get_schema_view(
     openapi.Info(
         title="Eco Trash API",
@@ -25,16 +38,17 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+# Router untuk ViewSet
 router = DefaultRouter()
 router.register(r'harga', HargaViewSet, basename='harga')
 
 urlpatterns = [
     # Swagger docs
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger(?P<format>\\.json|\\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-    # ViewSet router
+    # Include router URLs
     path('', include(router.urls)),
 
     # Auth & Profile
@@ -44,22 +58,28 @@ urlpatterns = [
     path('me/', MeView.as_view(), name='me'),
     path('profile/', ProfileUpdateView.as_view(), name='profile-update'),
 
-    # Nasabah Actions
+    # Nasabah
+    path('nasabah/', list_nasabah, name='list_nasabah_firestore'),
+    path('nasabah/<str:email>/', DetailNasabahByEmailView.as_view(), name='detail_nasabah'),
+    path('nasabah-list/', NasabahListView.as_view(), name='nasabah_list'),
+
+    # Transaksi & Validasi
     path('setor/', SetorSampahView.as_view(), name='setor_sampah'),
-    path('tukar-poin/', TukarPoinView.as_view(), name='tukar_poin'),
-    path('transfer/', TransferSaldoView.as_view(), name='transfer_saldo'),
-
-    # Admin Validasi & Laporan
-    path('validasi-setor/<int:pk>/', ValidasiSetoranView.as_view(), name='validasi_setor'),
-    path('export-laporan/', ExportLaporanView.as_view(), name='export_laporan'),
-
-    # Data Lookup
-    path('harga-aktif/', HargaAktifView.as_view(), name='harga_aktif'),
+    path('validasi-setor/<int:pk>/', ValidasiSetoranView.as_view(), name='validasi_setoran'),
+    path('validasi-setor/', DaftarSetoranBelumValidView.as_view(), name='daftar_validasi'),
     path('transaksi/', RiwayatTransaksiView.as_view(), name='riwayat_transaksi'),
+
+    # Harga Sampah
+    path('harga-aktif/', HargaAktifView.as_view(), name='harga_aktif'),
+
+    # Ringkasan & Laporan
     path('ringkasan-jenis/', RingkasanJenisView.as_view(), name='ringkasan_jenis'),
     path('ringkasan-bulanan/', RingkasanBulananView.as_view(), name='ringkasan_bulanan'),
+    path('ringkasan-nasabah/', RingkasanNasabahView.as_view(), name='ringkasan_nasabah'),
+    path('export-laporan/', ExportLaporanView.as_view(), name='export_laporan'),
+    path('laporan-downloads/', LaporanDownloadListView.as_view(), name='laporan_downloads'),
 
-    # Nasabah Management
-    path('nasabah/', list_nasabah, name='list_nasabah'),
-    path('nasabah/<str:email>/', DetailNasabahByEmailView.as_view(), name='detail_nasabah'),
+    # Poin & Transfer
+    path('tukar-poin/', TukarPoinView.as_view(), name='tukar_poin'),
+    path('transfer/', TransferSaldoView.as_view(), name='transfer_saldo'),
 ]

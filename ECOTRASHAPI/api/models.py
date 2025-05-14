@@ -1,7 +1,9 @@
-# models.py
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
+# ========================
+# Custom User
+# ========================
 class User(AbstractUser):
     groups = models.ManyToManyField(
         Group,
@@ -33,15 +35,23 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.role})"
 
+# ========================
+# Daftar Harga Sampah
+# ========================
 class TrashPrice(models.Model):
     jenis = models.CharField(max_length=100)
     harga_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
+    poin_per_kg = models.PositiveIntegerField(default=0)
+    kategori = models.CharField(max_length=100, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     tanggal_diperbarui = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.jenis} - Rp{self.harga_per_kg}/kg"
+        return f"{self.jenis} - Rp{self.harga_per_kg}/kg - {self.poin_per_kg} poin"
 
+# ========================
+# Transaksi Setoran Sampah
+# ========================
 class Transaction(models.Model):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
@@ -54,11 +64,16 @@ class Transaction(models.Model):
     nilai_transaksi = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     tanggal = models.DateTimeField(auto_now_add=True)
-    divalidasi_oleh = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='validasi_transaksi')
+    divalidasi_oleh = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='validasi_transaksi'
+    )
 
     def __str__(self):
         return f"{self.user.username} - {self.jenis.jenis} - {self.status}"
 
+# ========================
+# Penukaran Poin
+# ========================
 class PoinExchange(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='penukaran_poin')
     item = models.CharField(max_length=100)
@@ -68,6 +83,9 @@ class PoinExchange(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.item} ({self.poin_dipakai} poin)"
 
+# ========================
+# Transfer Saldo
+# ========================
 class TransferSaldo(models.Model):
     pengirim = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transfer_keluar')
     penerima = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transfer_masuk')
@@ -77,6 +95,9 @@ class TransferSaldo(models.Model):
     def __str__(self):
         return f"{self.pengirim.username} -> {self.penerima.username} : Rp{self.jumlah}"
 
+# ========================
+# Riwayat Unduh Laporan
+# ========================
 class LaporanDownload(models.Model):
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='laporan_unduhan')
     file_path = models.CharField(max_length=255)

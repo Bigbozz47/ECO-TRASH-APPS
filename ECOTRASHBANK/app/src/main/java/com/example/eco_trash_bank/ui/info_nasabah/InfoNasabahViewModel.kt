@@ -47,7 +47,7 @@ class InfoNasabahViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://10.0.2.2:8000/api/nasabah/$email/")
+            .url("http://192.168.18.10:8000/api/nasabah/$email/")
             .addHeader("Authorization", "Bearer $token")
             .build()
 

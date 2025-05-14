@@ -1,12 +1,19 @@
 from rest_framework import serializers
 from django.db.models.functions import TruncMonth
-from .models import User, TrashPrice, Transaction, PoinExchange, TransferSaldo, LaporanDownload
+from .models import (
+    User, TrashPrice, Transaction,
+    PoinExchange, TransferSaldo, LaporanDownload
+)
 
+
+# ============================
+# USER & REGISTER SERIALIZER
+# ============================
 class RegisterSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk registrasi user baru.
-    Menyembunyikan password dan membuat user dengan create_user().
-    """
+     Serializer untuk registrasi user baru.
+     Menyembunyikan password dan membuat user dengan create_user().
+     """
 
     password = serializers.CharField(write_only=True)
     no_hp = serializers.CharField(required=True)
@@ -24,49 +31,61 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
 class UserSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk menampilkan info dasar user (nasabah/admin).
-    """
+      Serializer untuk menampilkan info dasar user (nasabah/admin).
+      """
 
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'role', 'poin', 'saldo', 'no_hp', 'alamat']
-        read_only_fields = ['id', 'username', 'email', 'role', 'poin', 'saldo', 'no_hp', 'alamat']
+        read_only_fields = fields
+
 
 class NasabahListSerializer(serializers.ModelSerializer):
     """
-    Serializer khusus endpoint daftar nasabah (role='nasabah').
-    """
+     Serializer khusus endpoint daftar nasabah (role='nasabah').
+     """
+
     class Meta:
         model = User
         fields = ['id', 'username', 'poin', 'saldo']
-        read_only_fields = ['id', 'username', 'poin', 'saldo']
+        read_only_fields = fields
 
+
+# ============================
+# TRASH PRICE SERIALIZERS
+# ============================
 class TrashPriceSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk CRUD harga sampah.
-    """
+     Serializer untuk CRUD harga sampah.
+     """
 
     class Meta:
         model = TrashPrice
-        fields = ['id', 'jenis', 'harga_per_kg', 'is_active', 'tanggal_diperbarui']
+        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori', 'is_active', 'tanggal_diperbarui']
         read_only_fields = ['id', 'tanggal_diperbarui']
+
 
 class ActiveTrashPriceSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk menampilkan hanya harga sampah yang aktif.
-    """
+     Serializer untuk menampilkan hanya harga sampah yang aktif.
+     """
 
     class Meta:
         model = TrashPrice
-        fields = ['id', 'jenis', 'harga_per_kg']
+        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori']
 
+
+# ============================
+# TRANSACTION SERIALIZERS
+# ============================
 class TransactionCreateSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk pembuatan setoran sampah oleh nasabah.
-    Menghitung `nilai_transaksi` dan `poin`.
-    """
+      Serializer untuk pembuatan setoran sampah oleh nasabah.
+      Menghitung `nilai_transaksi` dan `poin`.
+      """
 
     class Meta:
         model = Transaction
@@ -79,9 +98,11 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        harga = validated_data['jenis'].harga_per_kg
-        nilai = validated_data['berat'] * harga
-        poin = int(nilai)
+        jenis = validated_data['jenis']
+        berat = validated_data['berat']
+        nilai = berat * jenis.harga_per_kg
+        poin = int(berat * jenis.poin_per_kg)
+
         return Transaction.objects.create(
             user=user,
             nilai_transaksi=nilai,
@@ -89,10 +110,11 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
             **validated_data
         )
 
+
 class TransactionDetailSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk detail transaksi, termasuk relasi user dan jenis sampah.
-    """
+     Serializer untuk detail transaksi, termasuk relasi user dan jenis sampah.
+     """
 
     user = UserSerializer(read_only=True)
     jenis = TrashPriceSerializer(read_only=True)
@@ -100,31 +122,57 @@ class TransactionDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['id', 'user', 'jenis', 'berat', 'nilai_transaksi',
-                  'poin', 'status', 'tanggal', 'divalidasi_oleh']
+        fields = [
+            'id', 'user', 'jenis', 'berat', 'nilai_transaksi',
+            'poin', 'status', 'tanggal', 'divalidasi_oleh'
+        ]
         read_only_fields = fields
+
 
 class TransactionSummaryJenisSerializer(serializers.Serializer):
     """
-    Serializer untuk ringkasan total berat per jenis sampah.
-    """
+     Serializer untuk ringkasan total berat per jenis sampah.
+     """
 
     jenis = serializers.CharField()
     total = serializers.DecimalField(max_digits=12, decimal_places=2)
 
+
 class TransactionSummaryBulananSerializer(serializers.Serializer):
     """
-    Serializer untuk ringkasan total berat transaksi per bulan.
-    """
+      Serializer untuk ringkasan total berat transaksi per bulan.
+      """
 
     month = serializers.DateField(format="%Y-%m")
     total = serializers.DecimalField(max_digits=12, decimal_places=2)
 
+
+# ============================
+# SETORAN VALIDASI LIST
+# ============================
+class SetoranSerializer(serializers.ModelSerializer):
+    nama_nasabah = serializers.CharField(source='user.username', read_only=True)
+    kategori = serializers.CharField(source='jenis.kategori', read_only=True)
+    poin = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'nama_nasabah', 'jumlah_sampah', 'kategori', 'poin']
+
+    jumlah_sampah = serializers.DecimalField(source='berat', max_digits=10, decimal_places=2)
+
+    def get_poin(self, obj):
+        return int(obj.berat * obj.jenis.poin_per_kg)
+
+
+# ============================
+# POIN EXCHANGE
+# ============================
 class PoinExchangeSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk penukaran poin oleh nasabah.
-    Mengurangi poin user secara otomatis.
-    """
+     Serializer untuk penukaran poin oleh nasabah.
+     Mengurangi poin user secara otomatis.
+     """
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -147,11 +195,15 @@ class PoinExchangeSerializer(serializers.ModelSerializer):
         user.save()
         return super().create(validated_data)
 
+
+# ============================
+# TRANSFER SALDO
+# ============================
 class TransferSaldoSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk transfer saldo antar nasabah.
-    Mengurangi saldo pengirim dan menambah penerima.
-    """
+     Serializer untuk transfer saldo antar nasabah.
+     Mengurangi saldo pengirim dan menambah penerima.
+     """
 
     pengirim = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -172,20 +224,26 @@ class TransferSaldoSerializer(serializers.ModelSerializer):
         pengirim = validated_data['pengirim']
         penerima = validated_data['penerima']
         jumlah = validated_data['jumlah']
+
         pengirim.saldo -= jumlah
         penerima.saldo += jumlah
         pengirim.save()
         penerima.save()
+
         return super().create(validated_data)
 
+
+# ============================
+# LAPORAN DOWNLOAD
+# ============================
 class LaporanDownloadSerializer(serializers.ModelSerializer):
     """
-    Serializer untuk riwayat unduh laporan PDF oleh admin.
-    """
+      Serializer untuk riwayat unduh laporan PDF oleh admin.
+      """
 
     admin = UserSerializer(read_only=True)
 
     class Meta:
         model = LaporanDownload
         fields = ['id', 'admin', 'file_path', 'tanggal_unduh']
-        read_only_fields = ['id', 'admin', 'file_path', 'tanggal_unduh']
+        read_only_fields = fields

@@ -1,30 +1,34 @@
 package com.example.eco_trash_bank.ui.laporan
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eco_trash_bank.databinding.FragmentLaporanSampahBinding
-import okhttp3.OkHttpClient
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class LaporanSampahFragment : Fragment() {
 
     private var _binding: FragmentLaporanSampahBinding? = null
     private val binding get() = _binding!!
-    private val client = OkHttpClient()
+    private lateinit var viewModel: LaporanSampahViewModel
+    private var adapter: RiwayatAdapter? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLaporanSampahBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProvider(this)[LaporanSampahViewModel::class.java]
+        viewModel = ViewModelProvider(this)[LaporanSampahViewModel::class.java]
 
-        // Observasi LiveData
+        // === Observasi Profil ===
         viewModel.username.observe(viewLifecycleOwner) {
             binding.userName.text = it
         }
@@ -33,14 +37,114 @@ class LaporanSampahFragment : Fragment() {
             binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
         }
 
+        // === Observasi Loading dan Error ===
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.loadingIndicator.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         viewModel.error.observe(viewLifecycleOwner) {
-            it?.let { message ->
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            it?.let { msg ->
+                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Panggil API
+        // === Ringkasan Jenis (BarChart) ===
+        viewModel.ringkasanJenis.observe(viewLifecycleOwner) { data ->
+            if (data.isEmpty()) {
+                binding.barChart.clear()
+                binding.barChart.setNoDataText("Tidak ada data jenis sampah.")
+                binding.barChart.invalidate()
+                return@observe
+            }
+
+            val entries = data.mapIndexed { index, item ->
+                BarEntry(index.toFloat(), item.totalKg.toFloat())
+            }
+            val labels = data.map { it.jenis }
+
+            val dataSet = BarDataSet(entries, "Jenis Sampah")
+            dataSet.valueTextSize = 12f
+            val barData = BarData(dataSet)
+
+            binding.barChart.apply {
+                this.data = barData
+                xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.granularity = 1f
+                axisRight.isEnabled = false
+                description.isEnabled = false
+                invalidate()
+            }
+        }
+
+        // === Ringkasan Bulanan (LineChart) ===
+        viewModel.ringkasanBulanan.observe(viewLifecycleOwner) { data ->
+            if (data.isEmpty()) {
+                binding.lineChart.clear()
+                binding.lineChart.setNoDataText("Tidak ada data bulanan.")
+                binding.lineChart.invalidate()
+                return@observe
+            }
+
+            val entries = data.mapIndexed { index, item ->
+                Entry(index.toFloat(), item.total.toFloat())
+            }
+            val labels = data.map { it.month }
+
+            val dataSet = LineDataSet(entries, "Setoran Bulanan (Kg)")
+            dataSet.valueTextSize = 12f
+            dataSet.setDrawCircles(true)
+
+            val lineData = LineData(dataSet)
+
+            binding.lineChart.apply {
+                this.data = lineData
+                xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.granularity = 1f
+                axisRight.isEnabled = false
+                description.isEnabled = false
+                invalidate()
+            }
+        }
+
+        // === Riwayat RecyclerView ===
+        viewModel.riwayatNasabah.observe(viewLifecycleOwner) { list ->
+            if (list.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Belum ada data setoran nasabah.", Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+
+            if (adapter == null) {
+                adapter = RiwayatAdapter(list.toMutableList())
+                binding.riwayatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                binding.riwayatRecyclerView.adapter = adapter
+            } else {
+                adapter?.updateData(list)
+            }
+        }
+
+        // === Tombol PDF Backend ===
+        binding.btnGeneratePdf.setOnClickListener {
+            viewModel.exportLaporanPDF(requireContext())
+        }
+
+        // === Tombol Export Grafik ke PDF ===
+        binding.btnExportChartPdf.setOnClickListener {
+            if (binding.barChart.width == 0 || binding.lineChart.height == 0) {
+                Toast.makeText(requireContext(), "Tunggu grafik selesai dimuat", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.saveChartsAsPdf(binding.barChart, binding.lineChart, requireContext())
+        }
+
+        // === Fetch Data ===
         viewModel.fetchUserProfile(requireContext())
+        viewModel.fetchRingkasanJenis(requireContext())
+        viewModel.fetchRingkasanBulanan(requireContext())
+        viewModel.fetchRiwayatNasabah(requireContext())
+        viewModel.loadDummyData()
 
         return binding.root
     }
@@ -48,5 +152,6 @@ class LaporanSampahFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        adapter = null
     }
 }

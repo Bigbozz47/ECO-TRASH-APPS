@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="#FFF"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvNasabahName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama Nasabah"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tvJumlahSampah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Sampah: 5 kg"/>
+
+    <TextView
+        android:id="@+id/tvKategori"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kategori: Organik"/>
+
+    <TextView
+        android:id="@+id/tvPoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Poin: 500"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnValidasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Validasi" />
+
+        <Button
+            android:id="@+id/btnTransfer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transfer"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+</LinearLayout>
