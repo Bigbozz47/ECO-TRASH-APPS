@@ -43,7 +43,7 @@ class ValidationViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/me/")
+            .url("http://10.0.2.2:8000/api/me/")
             .addHeader("Authorization", "Bearer $token")
             .build()
 
@@ -73,7 +73,7 @@ class ValidationViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/validasi-setor/")
+            .url("http://10.0.2.2:8000/api/validasi-setor/")
             .addHeader("Authorization", "Bearer $token")
             .build()
 
@@ -115,7 +115,7 @@ class ValidationViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/validasi-setor/$id/")
+            .url("http://10.0.2.2:8000/api/validasi-setor/$id/")
             .post(RequestBody.create(null, ByteArray(0)))
             .addHeader("Authorization", "Bearer $token")
             .build()
@@ -142,7 +142,7 @@ class ValidationViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/transfer-saldo/$id/")
+            .url("http://10.0.2.2:8000/api/transfer-saldo/$id/")
             .post(RequestBody.create(null, ByteArray(0)))
             .addHeader("Authorization", "Bearer $token")
             .build()

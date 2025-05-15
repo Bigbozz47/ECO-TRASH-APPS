@@ -6,5 +6,6 @@
         <domain includeSubdomains="true">10.0.2.2</domain>
         <!-- Ip Local digunakan apabila testing ke hp. Tambahkan IP tersebut ke ALLOWED_HOSTS di settings.py Django:-->
         <domain includeSubdomains="true">192.168.18.10</domain>
+        <domain includeSubdomains="true">192.168.202.70</domain>
     </domain-config>
 </network-security-config>

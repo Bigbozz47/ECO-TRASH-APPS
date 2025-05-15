@@ -17,9 +17,9 @@ from .serializers import (
     TrashPriceSerializer, ActiveTrashPriceSerializer,
     TransactionSummaryJenisSerializer, TransactionSummaryBulananSerializer,
     PoinExchangeSerializer, TransferSaldoSerializer, LaporanDownloadSerializer,
-    SetoranSerializer
+    SetoranSerializer, TempBeratSerializer, TempBeratCreateSerializer,
 )
-from .models import User, TrashPrice, Transaction, LaporanDownload
+from .models import User, TrashPrice, Transaction, LaporanDownload, TempBerat
 from .permissions import IsAdmin, IsNasabah
 
 # === AUTHENTICATION ===
@@ -101,6 +101,47 @@ class SetorSampahView(generics.CreateAPIView):
     serializer_class = TransactionCreateSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
 
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        jenis_id = request.data.get('jenis')  # Diambil dari frontend
+
+        # Validasi jenis sampah
+        try:
+            jenis = TrashPrice.objects.get(id=jenis_id)
+        except TrashPrice.DoesNotExist:
+            return Response({'error': 'Jenis sampah tidak valid'}, status=400)
+
+        # Ambil berat dari TempBerat
+        try:
+            temp_berat = TempBerat.objects.filter(nasabah=user).latest('waktu')
+            berat = temp_berat.berat
+        except TempBerat.DoesNotExist:
+            return Response({'error': 'Tidak ada data berat terbaru untuk Anda'}, status=400)
+
+        if berat <= 0:
+            return Response({'error': 'Berat tidak valid atau nol'}, status=400)
+
+        # Hitung nilai dan poin
+        nilai = berat * jenis.harga_per_kg
+        poin = int(berat * jenis.poin_per_kg)
+
+        # Simpan transaksi
+        transaksi = Transaction.objects.create(
+            user=user,
+            jenis=jenis,
+            berat=berat,
+            nilai_transaksi=nilai,
+            poin=poin,
+            status='pending'
+        )
+
+        # Hapus berat sementara setelah transaksi dibuat
+        temp_berat.delete()
+
+        serializer = TransactionDetailSerializer(transaksi)
+        return Response(serializer.data, status=201)
+
+
 class DaftarSetoranBelumValidView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
@@ -150,6 +191,43 @@ class RiwayatTransaksiView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Transaction.objects.filter(user=user) if user.role == 'nasabah' else Transaction.objects.all()
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])  # Bisa diganti jadi hanya device tertentu
+def update_berat_terbaru(request):
+    """
+    Endpoint yang digunakan ESP32 untuk mengirim berat terbaru dari timbangan
+    """
+    serializer = TempBeratCreateSerializer(data=request.data)
+    if serializer.is_valid():
+        nasabah = serializer.validated_data['nasabah']
+        berat = serializer.validated_data['berat']
+
+        # Hapus data lama dan simpan yang baru (overwrite 1 data per nasabah)
+        TempBerat.objects.filter(nasabah=nasabah).delete()
+        TempBerat.objects.create(nasabah=nasabah, berat=berat)
+        return Response({'status': 'berhasil'}, status=201)
+
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_berat_terbaru(request):
+    """
+    Endpoint untuk mengambil berat terbaru berdasarkan ID nasabah
+    """
+    nasabah_id = request.query_params.get('nasabah_id')
+    if not nasabah_id:
+        return Response({'error': 'Parameter nasabah_id wajib disediakan'}, status=400)
+
+    try:
+        temp = TempBerat.objects.filter(nasabah_id=nasabah_id).latest('waktu')
+        serializer = TempBeratSerializer(temp)
+        return Response(serializer.data)
+    except TempBerat.DoesNotExist:
+        return Response({'berat': 0}, status=200)
+
 
 # === RINGKASAN ===
 class RingkasanJenisView(APIView):

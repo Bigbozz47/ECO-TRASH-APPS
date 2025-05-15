@@ -13,7 +13,7 @@ from .views import (
     list_nasabah, DetailNasabahByEmailView, NasabahListView,
 
     # Transaksi & Validasi
-    SetorSampahView, ValidasiSetoranView, DaftarSetoranBelumValidView, RiwayatTransaksiView,
+    SetorSampahView, ValidasiSetoranView, DaftarSetoranBelumValidView, RiwayatTransaksiView,update_berat_terbaru, get_berat_terbaru,
 
     # Harga Sampah
     HargaViewSet, HargaAktifView,
@@ -68,6 +68,8 @@ urlpatterns = [
     path('validasi-setor/<int:pk>/', ValidasiSetoranView.as_view(), name='validasi_setoran'),
     path('validasi-setor/', DaftarSetoranBelumValidView.as_view(), name='daftar_validasi'),
     path('transaksi/', RiwayatTransaksiView.as_view(), name='riwayat_transaksi'),
+    path('berat-terbaru/', update_berat_terbaru),
+    path('get-berat-terbaru/', get_berat_terbaru),
 
     # Harga Sampah
     path('harga-aktif/', HargaAktifView.as_view(), name='harga_aktif'),

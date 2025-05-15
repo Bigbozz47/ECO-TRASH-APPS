@@ -37,7 +37,7 @@ class InfoHargaViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/me/")
+            .url("http://10.0.2.2:8000/api/me/")
             .addHeader("Authorization", "Bearer $token")
             .build()
 
@@ -71,7 +71,7 @@ class InfoHargaViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/harga/")
+            .url("http://10.0.2.2:8000/api/harga/")
             .addHeader("Authorization", "Bearer ${token.trim()}")
             .build()
 

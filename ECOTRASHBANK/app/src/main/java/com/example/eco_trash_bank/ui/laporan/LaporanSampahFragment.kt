@@ -1,7 +1,6 @@
 package com.example.eco_trash_bank.ui.laporan
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,23 +36,20 @@ class LaporanSampahFragment : Fragment() {
             binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
         }
 
-        // === Observasi Loading dan Error ===
+        // === Observasi Loading & Error ===
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.loadingIndicator.visibility = if (it) View.VISIBLE else View.GONE
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            it?.let { msg ->
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-            }
+            it?.let { msg -> Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show() }
         }
 
         // === Ringkasan Jenis (BarChart) ===
         viewModel.ringkasanJenis.observe(viewLifecycleOwner) { data ->
             if (data.isEmpty()) {
-                binding.barChart.clear()
-                binding.barChart.setNoDataText("Tidak ada data jenis sampah.")
-                binding.barChart.invalidate()
+                // Fallback dummy jika kosong
+                viewModel.loadDummyData()
                 return@observe
             }
 
@@ -80,9 +76,8 @@ class LaporanSampahFragment : Fragment() {
         // === Ringkasan Bulanan (LineChart) ===
         viewModel.ringkasanBulanan.observe(viewLifecycleOwner) { data ->
             if (data.isEmpty()) {
-                binding.lineChart.clear()
-                binding.lineChart.setNoDataText("Tidak ada data bulanan.")
-                binding.lineChart.invalidate()
+                // Fallback dummy jika kosong
+                viewModel.loadDummyData()
                 return@observe
             }
 
@@ -111,7 +106,8 @@ class LaporanSampahFragment : Fragment() {
         // === Riwayat RecyclerView ===
         viewModel.riwayatNasabah.observe(viewLifecycleOwner) { list ->
             if (list.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Belum ada data setoran nasabah.", Toast.LENGTH_SHORT).show()
+                // Fallback dummy jika kosong
+                viewModel.loadDummyData()
                 return@observe
             }
 
@@ -124,12 +120,12 @@ class LaporanSampahFragment : Fragment() {
             }
         }
 
-        // === Tombol PDF Backend ===
+        // === Tombol PDF dari Backend ===
         binding.btnGeneratePdf.setOnClickListener {
             viewModel.exportLaporanPDF(requireContext())
         }
 
-        // === Tombol Export Grafik ke PDF ===
+        // === Tombol Export Chart ke PDF ===
         binding.btnExportChartPdf.setOnClickListener {
             if (binding.barChart.width == 0 || binding.lineChart.height == 0) {
                 Toast.makeText(requireContext(), "Tunggu grafik selesai dimuat", Toast.LENGTH_SHORT).show()
@@ -139,12 +135,11 @@ class LaporanSampahFragment : Fragment() {
             viewModel.saveChartsAsPdf(binding.barChart, binding.lineChart, requireContext())
         }
 
-        // === Fetch Data ===
+        // === Fetch Data dari Backend ===
         viewModel.fetchUserProfile(requireContext())
         viewModel.fetchRingkasanJenis(requireContext())
         viewModel.fetchRingkasanBulanan(requireContext())
         viewModel.fetchRiwayatNasabah(requireContext())
-        viewModel.loadDummyData()
 
         return binding.root
     }

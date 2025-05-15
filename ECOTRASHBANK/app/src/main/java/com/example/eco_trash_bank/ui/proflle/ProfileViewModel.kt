@@ -45,7 +45,7 @@ class ProfileViewModel : ViewModel() {
         }
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/me/")
+            .url("http://10.0.2.2:8000/api/me/")
             .addHeader("Authorization", "Bearer $token")
             .build()
 
@@ -92,7 +92,7 @@ class ProfileViewModel : ViewModel() {
         val requestBody = json.toString().toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
-            .url("http://192.168.18.10:8000/api/profile/") // Ganti sesuai backend
+            .url("http://10.0.2.2:8000/api/profile/") // Ganti sesuai backend
             .put(requestBody)
             .addHeader("Authorization", "Bearer $token")
             .build()

@@ -29,7 +29,6 @@ class LaporanSampahViewModel : ViewModel() {
 
     private val client = OkHttpClient()
 
-    // LiveData
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> get() = _username
 
@@ -81,7 +80,6 @@ class LaporanSampahViewModel : ViewModel() {
 
     fun fetchRingkasanJenis(context: Context) {
         _loading.postValue(true)
-
         val token = context.getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
             .getString("access_token", null) ?: return
 
@@ -113,7 +111,6 @@ class LaporanSampahViewModel : ViewModel() {
 
     fun fetchRingkasanBulanan(context: Context) {
         _loading.postValue(true)
-
         val token = context.getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
             .getString("access_token", null) ?: return
 
@@ -146,7 +143,6 @@ class LaporanSampahViewModel : ViewModel() {
 
     fun fetchRiwayatNasabah(context: Context) {
         _loading.postValue(true)
-
         val token = context.getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
             .getString("access_token", null) ?: return
 
@@ -163,7 +159,6 @@ class LaporanSampahViewModel : ViewModel() {
 
             override fun onResponse(call: Call, response: Response) {
                 _loading.postValue(false)
-
                 val bodyString = response.body?.string()
                 if (!response.isSuccessful || bodyString.isNullOrEmpty() || !bodyString.trim().startsWith("[")) {
                     _error.postValue("Gagal memuat riwayat nasabah (Format salah atau token tidak valid)")

@@ -35,6 +35,7 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.role})"
 
+
 # ========================
 # Daftar Harga Sampah
 # ========================
@@ -48,6 +49,19 @@ class TrashPrice(models.Model):
 
     def __str__(self):
         return f"{self.jenis} - Rp{self.harga_per_kg}/kg - {self.poin_per_kg} poin"
+
+
+# ========================
+# Berat Sementara dari Timbangan
+# ========================
+class TempBerat(models.Model):
+    nasabah = models.ForeignKey(User, on_delete=models.CASCADE, related_name='data_berat_sementara')
+    berat = models.DecimalField(max_digits=6, decimal_places=2)
+    waktu = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.nasabah.username} - {self.berat} kg @ {self.waktu.strftime('%H:%M:%S')}"
+
 
 # ========================
 # Transaksi Setoran Sampah
@@ -71,6 +85,7 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.jenis.jenis} - {self.status}"
 
+
 # ========================
 # Penukaran Poin
 # ========================
@@ -83,6 +98,7 @@ class PoinExchange(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.item} ({self.poin_dipakai} poin)"
 
+
 # ========================
 # Transfer Saldo
 # ========================
@@ -94,6 +110,7 @@ class TransferSaldo(models.Model):
 
     def __str__(self):
         return f"{self.pengirim.username} -> {self.penerima.username} : Rp{self.jumlah}"
+
 
 # ========================
 # Riwayat Unduh Laporan
