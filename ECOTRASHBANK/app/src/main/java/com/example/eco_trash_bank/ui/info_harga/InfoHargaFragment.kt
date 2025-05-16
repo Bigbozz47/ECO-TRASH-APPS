@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.eco_trash_bank.adapter.HargaAdapter
+import androidx.navigation.fragment.findNavController
 import com.example.eco_trash_bank.databinding.FragmentInfoHargaBinding
 import com.example.eco_trash_bank.viewmodel.InfoHargaViewModel
 
@@ -16,7 +15,6 @@ class InfoHargaFragment : Fragment() {
 
     private var _binding: FragmentInfoHargaBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: HargaAdapter
     private lateinit var viewModel: InfoHargaViewModel
 
     override fun onCreateView(
@@ -27,20 +25,12 @@ class InfoHargaFragment : Fragment() {
         _binding = FragmentInfoHargaBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[InfoHargaViewModel::class.java]
 
-        setupRecyclerView()
         observeViewModel()
-        setupListeners()
+        setupClickListeners()
 
         viewModel.fetchUserProfile(requireContext())
-        viewModel.fetchHargaList(requireContext()) // tampilkan semua data default
 
         return binding.root
-    }
-
-    private fun setupRecyclerView() {
-        adapter = HargaAdapter()
-        binding.recyclerViewHarga.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewHarga.adapter = adapter
     }
 
     private fun observeViewModel() {
@@ -51,25 +41,18 @@ class InfoHargaFragment : Fragment() {
         viewModel.role.observe(viewLifecycleOwner) {
             binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
         }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            it?.let { msg ->
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        viewModel.hargaList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
     }
 
-    private fun setupListeners() {
+    private fun setupClickListeners() {
         binding.cardOrganik.setOnClickListener {
-            viewModel.fetchHargaList(requireContext(), "organik")
+            val action = InfoHargaFragmentDirections.actionInfoHargaFragmentToListHargaOrganikFragment()
+            findNavController().navigate(action)
         }
 
         binding.cardAnorganik.setOnClickListener {
-            viewModel.fetchHargaList(requireContext(), "anorganik")
+            val action = InfoHargaFragmentDirections
+                .actionInfoHargaFragmentToListSubKategoriAnorganikFragment()
+            findNavController().navigate(action)
         }
     }
 

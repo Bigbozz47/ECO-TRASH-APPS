@@ -46,15 +46,13 @@ class NasabahListSerializer(serializers.ModelSerializer):
 class TrashPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrashPrice
-        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori', 'is_active', 'tanggal_diperbarui']
+        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori', 'sub_kategori', 'is_active', 'tanggal_diperbarui']
         read_only_fields = ['id', 'tanggal_diperbarui']
-
 
 class ActiveTrashPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrashPrice
-        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori']
-
+        fields = ['id', 'jenis', 'harga_per_kg', 'poin_per_kg', 'kategori', 'sub_kategori']
 
 # ============================
 # TEMP BERAT (BERAT SEMENTARA)

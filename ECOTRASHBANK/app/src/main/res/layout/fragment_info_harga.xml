@@ -89,138 +89,121 @@
     </RelativeLayout>
 
     <!-- MAIN CONTENT -->
-    <ScrollView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/header_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- SearchView -->
+        <TextView
+            android:id="@+id/titleHarga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="Informasi Nilai Harga Sampah"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <!-- Kategori Card -->
         <LinearLayout
+            android:id="@+id/kategoriCardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:gravity="center_horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2"
+            android:layout_marginBottom="12dp">
 
-            <!-- Title -->
-            <TextView
-                android:id="@+id/titleHarga"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit Informasi Nilai Harga Sampah"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginBottom="16dp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardOrganik"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/black"
+                app:cardBackgroundColor="@color/green_200"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
-            <!-- Kategori Card -->
-            <LinearLayout
-                android:id="@+id/kategoriCardContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:weightSum="2"
-                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardOrganik"
-                    android:layout_width="0dp"
-                    android:layout_height="120dp"
-                    android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="6dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/black"
-                    app:cardBackgroundColor="@color/green_200"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/outline_delete_24"
+                        android:contentDescription="Organik" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Organik"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/outline_delete_24"
-                            android:contentDescription="Organik" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAnorganik"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/black"
+                app:cardBackgroundColor="@color/yellow_300"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Organik"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardAnorganik"
-                    android:layout_width="0dp"
-                    android:layout_height="120dp"
-                    android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="6dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/black"
-                    app:cardBackgroundColor="@color/yellow_300"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/outline_delete_24"
+                        android:contentDescription="Anorganik" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/outline_delete_24"
-                            android:contentDescription="Anorganik" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Anorganik"
-                            android:textColor="#000000"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <!-- GridLayout Subkategori Anorganik -->
-            <GridLayout
-                android:id="@+id/subkategoriGrid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="3"
-                android:alignmentMode="alignMargins"
-                android:useDefaultMargins="true"
-                android:visibility="gone" />
-
-            <!-- RecyclerView Daftar Harga -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewHarga"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:listitem="@layout/item_harga_sampah" />
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Anorganik"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-    </ScrollView>
+
+        <!-- RecyclerView Daftar Harga -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHarga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_harga" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

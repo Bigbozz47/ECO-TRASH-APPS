@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_validation">Validation</string>
     <string name="title_profile">Profile</string>
+    <string-array name="kategori_sampah">
+        <item>Organik</item>
+        <item>Anorganik</item>
+    </string-array>
+
 </resources>

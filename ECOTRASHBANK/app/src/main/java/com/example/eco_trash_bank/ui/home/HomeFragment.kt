@@ -31,16 +31,19 @@ class HomeFragment : Fragment() {
 
         // Observasi LiveData
         viewModel.username.observe(viewLifecycleOwner) {
-            binding.userName.text = it
+            Log.d("HomeFragment", "username update: $it")
+            _binding?.userName?.text = it
         }
 
         viewModel.role.observe(viewLifecycleOwner) {
-            binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
+            _binding?.userStatus?.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
             it?.let { message ->
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                if (isAdded) { // pastikan fragment masih ter-attach
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -56,7 +59,11 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnEditHarga.setOnClickListener {
-            findNavController().navigate(R.id.navigation_info_harga)
+            try {
+                findNavController().navigate(R.id.infoHargaFragment)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Navigasi gagal: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
 

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header Hijau -->
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:background="@color/green_500"
+        android:padding="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Nama & Status -->
+        <LinearLayout
+            android:id="@+id/user_info_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengguna"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• Role"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Notifikasi -->
+        <RelativeLayout
+            android:id="@+id/notificationContainer"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp">
+
+            <ImageView
+                android:id="@+id/notification_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_notification"
+                android:background="@drawable/circle_background"
+                android:padding="6dp"
+                android:contentDescription="Notifikasi" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_red_dot" />
+        </RelativeLayout>
+
+        <!-- Foto Profil -->
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_toStartOf="@id/notificationContainer"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_profile"
+            android:background="@drawable/circle_background"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Profil" />
+    </RelativeLayout>
+
+    <!-- MAIN CONTENT -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/header_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Form Harga Sampah"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/etJenis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Jenis Sampah"
+                android:inputType="text"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etHarga"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Harga per Kg"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etPoin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:hint="Poin per Kg"
+                android:inputType="number"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btnSimpan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Simpan"
+                android:textStyle="bold"
+                android:backgroundTint="@color/green_500"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

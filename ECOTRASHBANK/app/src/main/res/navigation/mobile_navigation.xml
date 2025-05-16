@@ -24,10 +24,77 @@
         tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/navigation_info_harga"
+        android:id="@+id/infoHargaFragment"
         android:name="com.example.eco_trash_bank.ui.info_harga.InfoHargaFragment"
-        android:label="Info Harga"
-        tools:layout="@layout/fragment_info_harga" />
+        android:label="Informasi Harga"
+        tools:layout="@layout/fragment_info_harga">
+
+        <action
+            android:id="@+id/action_infoHargaFragment_to_listHargaOrganikFragment"
+            app:destination="@id/listHargaOrganikFragment" />
+
+        <action
+            android:id="@+id/action_infoHargaFragment_to_listSubKategoriAnorganikFragment"
+            app:destination="@id/listSubKategoriAnorganikFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/listHargaOrganikFragment"
+        android:name="com.example.eco_trash_bank.ui.harga.ListHargaOrganikFragment"
+        android:label="Harga Sampah Organik"
+        tools:layout="@layout/fragment_list_harga_organik">
+        <action
+            android:id="@+id/action_listHargaOrganikFragment_to_formHargaFragment"
+            app:destination="@id/formHargaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listSubKategoriAnorganikFragment"
+        android:name="com.example.eco_trash_bank.ui.harga.ListSubKategoriAnorganikFragment"
+        android:label="Subkategori Anorganik"
+        tools:layout="@layout/fragment_list_subkategori_anorganik">
+
+        <action
+            android:id="@+id/action_listSubKategoriAnorganikFragment_to_listHargaAnorganikFragment"
+            app:destination="@id/listHargaAnorganikFragment">
+            <argument
+                android:name="subKategori"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/listHargaAnorganikFragment"
+        android:name="com.example.eco_trash_bank.ui.harga.ListHargaAnorganikFragment"
+        android:label="List Harga Anorganik"
+        tools:layout="@layout/fragment_list_harga_anorganik">
+
+        <argument
+            android:name="subKategori"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_listHargaAnorganikFragment_to_formHargaFragment"
+            app:destination="@id/formHargaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/formHargaFragment"
+        android:name="com.example.eco_trash_bank.ui.harga.FormHargaFragment"
+        android:label="Form Harga"
+        tools:layout="@layout/fragment_form_harga">
+
+        <argument
+            android:name="hargaData"
+            app:argType="com.example.eco_trash_bank.model.HargaSampah"
+            app:nullable="true" />
+
+        <argument
+            android:name="subKategori"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_laporan_sampah"
@@ -68,4 +135,5 @@
             android:name="email"
             app:argType="string" />
     </fragment>
+
 </navigation>

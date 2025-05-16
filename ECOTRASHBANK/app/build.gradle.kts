@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safe.args)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -47,6 +48,7 @@ dependencies {
     implementation ("com.google.android.material:material:1.10.0")
     implementation ("com.itextpdf:itextpdf:5.5.13.3")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.0.3")
+    implementation ("androidx.cardview:cardview:1.0.0")
 
     // Dependensi via version catalog (libs.*) tetap sama
     implementation(libs.androidx.core.ktx)

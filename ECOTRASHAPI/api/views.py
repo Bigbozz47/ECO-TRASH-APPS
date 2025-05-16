@@ -258,9 +258,19 @@ class RingkasanNasabahView(APIView):
 
 # === CRUD HARGA ===
 class HargaViewSet(viewsets.ModelViewSet):
-    queryset = TrashPrice.objects.all()
+    queryset = TrashPrice.objects.all().order_by('kategori', 'sub_kategori', 'jenis')
     serializer_class = TrashPriceSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        kategori = self.request.query_params.get('kategori')
+        sub_kategori = self.request.query_params.get('sub_kategori')
+        if kategori:
+            queryset = queryset.filter(kategori__iexact=kategori)
+        if sub_kategori:
+            queryset = queryset.filter(sub_kategori__iexact=sub_kategori)
+        return queryset
 
     def perform_create(self, serializer):
         instance = serializer.save()
@@ -269,6 +279,7 @@ class HargaViewSet(viewsets.ModelViewSet):
             'harga_per_kg': float(instance.harga_per_kg),
             'poin_per_kg': instance.poin_per_kg,
             'kategori': instance.kategori,
+            'sub_kategori': instance.sub_kategori,
             'is_active': instance.is_active,
             'tanggal_diperbarui': instance.tanggal_diperbarui.isoformat(),
         })
@@ -280,6 +291,7 @@ class HargaViewSet(viewsets.ModelViewSet):
             'harga_per_kg': float(instance.harga_per_kg),
             'poin_per_kg': instance.poin_per_kg,
             'kategori': instance.kategori,
+            'sub_kategori': instance.sub_kategori,
             'is_active': instance.is_active,
             'tanggal_diperbarui': instance.tanggal_diperbarui.isoformat(),
         })
@@ -288,10 +300,19 @@ class HargaViewSet(viewsets.ModelViewSet):
         db.collection('trash_prices').document(str(instance.id)).delete()
         instance.delete()
 
+
+
 class HargaAktifView(generics.ListAPIView):
-    queryset = TrashPrice.objects.filter(is_active=True)
     serializer_class = ActiveTrashPriceSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = TrashPrice.objects.filter(is_active=True)
+        kategori = self.request.query_params.get('kategori')
+        if kategori:
+            queryset = queryset.filter(kategori__iexact=kategori)
+        return queryset
+
 
 # === POIN, SALDO, LAPORAN ===
 class NasabahListView(generics.ListAPIView):
