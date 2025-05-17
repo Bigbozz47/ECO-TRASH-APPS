@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
-**Eco Trash Bank** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
+**Eco Trash APPS** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
 
 ---
 
