@@ -19,7 +19,7 @@ Kampus Terminal
 **🏫 Asal Perguruan Tinggi:**  
 Universitas Negeri Padang
 
-**Eco Trash APPS** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
+**Eco Trash Apps** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
 
 ---
 
