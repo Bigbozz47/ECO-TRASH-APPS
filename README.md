@@ -1,11 +1,28 @@
-# 🌿 ECO TRASH BANK
+# 🌿 ECO TRASH APPS
 
 ![Platform](https://img.shields.io/badge/platform-Android%20%26%20Django-blue)
 ![Status](https://img.shields.io/badge/status-Aktif%20%26%20Berkembang-success)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
-**Eco Trash Bank** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
+**📌 Judu:**  
+EcoTrash : Mobile Integrated Monitoring Waste with Based Weighing System sebagai Acuan Data Sampah di Kota Padang
+
+**👥 Nama Tim:**  
+Kampus Terminal
+
+**👤 Anggota Tim:**
+
+| Nama Lengkap         | NIM              | Program Studi             |
+|----------------------|------------------|---------------------------|
+| Delano Yusuf Habibie | 22343040         | S1 Informatika(NK)        |
+| Selvi Afmailia       | 22130018         | D4 Elektro Industri       |
+| Yazid Aqil Assalam   | 22343014         | S1 Informatika(NK)        |
+
+**🏫 Asal Perguruan Tinggi:**  
+Universitas Negeri Padang
+
+**Eco Trash Apps** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan dengan sistem berbasis teknologi Internet of Things (IoT).
 
 ---
 
