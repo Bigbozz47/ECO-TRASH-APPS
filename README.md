@@ -124,9 +124,9 @@ Universitas Negeri Padang
 ### 🔧 Backend (Django)
 - Django REST Framework
 - JWT (SimpleJWT)
-- PostgreSQL / SQLite
+- SQLite
 - ReportLab (PDF)
-- Firebase SDK (opsional)
+- Firebase SDK 
 
 ### 📱 Android (Kotlin)
 - MVVM Architecture
