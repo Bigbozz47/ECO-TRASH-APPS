@@ -1,4 +1,4 @@
-# 🌿 ECO TRASH BANK
+# 🌿 ECO TRASH APPS
 
 ![Platform](https://img.shields.io/badge/platform-Android%20%26%20Django-blue)
 ![Status](https://img.shields.io/badge/status-Aktif%20%26%20Berkembang-success)
