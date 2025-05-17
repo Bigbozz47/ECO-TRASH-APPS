@@ -1,5 +1,11 @@
 package com.example.nasabahbanksampah.ui.inputsampah
 
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.nasabahbanksampah.R
 import com.example.nasabahbanksampah.databinding.FragmentInputDetailBinding
 import okhttp3.*
 import org.json.JSONObject
@@ -18,6 +26,27 @@ class InputDetailFragment : Fragment() {
     private var _binding: FragmentInputDetailBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
+
+    private var selectedImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            val uri = result.data?.data
+            Log.d("UPLOAD_DEBUG", "URI dari galeri: $uri")
+            if (uri != null) {
+                selectedImageUri = uri
+                binding.imgPreview.setImageURI(uri)
+                binding.imgPreview.visibility = View.VISIBLE
+
+                Toast.makeText(requireContext(), "Foto berhasil dimuat", Toast.LENGTH_SHORT).show()
+                // Tidak langsung navigate
+            } else {
+                Toast.makeText(requireContext(), "Gagal mendapatkan gambar", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,10 +62,24 @@ class InputDetailFragment : Fragment() {
             val berat = binding.etBerat.text.toString()
             if (berat.isEmpty()) {
                 Toast.makeText(requireContext(), "Masukkan berat sampah", Toast.LENGTH_SHORT).show()
+            } else if (selectedImageUri == null) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Upload Foto")
+                    .setMessage("Anda belum mengunggah foto. Ingin lanjut tanpa foto?")
+                    .setPositiveButton("Lanjut") { _, _ ->
+                        findNavController().navigate(R.id.trackingPengangkutFragment)
+                    }
+                    .setNegativeButton("Batal", null)
+                    .show()
             } else {
-                Toast.makeText(requireContext(), "Sampah berhasil dikirim", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                // Jika berat ada dan foto sudah dipilih, langsung navigate
+                findNavController().navigate(R.id.trackingPengangkutFragment)
             }
+        }
+
+        binding.btnUploadFoto.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
         }
 
         return view
