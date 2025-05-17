@@ -5,6 +5,9 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
+**📌 Judu:**  
+EcoTrash:Mobile Integrated Monitoring Waste with Based Weighing System sebagai Acuan Data Sampah di Kota Padang
+
 **👥 Nama Tim:**  
 Kampus Terminal
 
