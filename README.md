@@ -5,6 +5,20 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
+**👥 Nama Tim:**  
+Kampus Terminal
+
+**👤 Anggota Tim:**
+
+| Nama Lengkap         | NIM              | Program Studi             |
+|----------------------|------------------|---------------------------|
+| Delano Yusuf Habibie | 22343040         | S1 Informatika(NK)        |
+| Selvi Afmailia       | 22130018         | D4 Elektro Industri       |
+| Yazid Aqil Assalam   | 22343014         | S1 Informatika(NK)        |
+
+**🏫 Asal Perguruan Tinggi:**  
+Universitas Negeri Padang
+
 **Eco Trash APPS** adalah aplikasi pengelolaan **bank sampah digital** berbasis Android dengan backend Django REST API. Aplikasi ini mendukung pengelolaan transaksi sampah, pengumpulan poin, validasi setoran, dan pembuatan laporan secara otomatis dan transparan.
 
 ---
