@@ -6,7 +6,7 @@
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
 <p align="center">
-  <img src="logo.png" alt="Logo Eco Trash Bank" width="500"/>
+  <img src="logo.png" alt="Logo Eco Trash Bank" width="300"/>
 </p>
 
 **📌 Judu:**  
