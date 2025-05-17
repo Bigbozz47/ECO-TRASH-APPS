@@ -5,6 +5,10 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
+<p align="center">
+  <img src="logo.jpeg" alt="Logo Eco Trash Bank" width="500"/>
+</p>
+
 **📌 Judu:**  
 EcoTrash : Mobile Integrated Monitoring Waste with Based Weighing System sebagai Acuan Data Sampah di Kota Padang
 
