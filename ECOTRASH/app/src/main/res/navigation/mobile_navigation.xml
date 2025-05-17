@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_beranda">
+
+    <fragment
+        android:id="@+id/navigation_beranda"
+        android:name="com.example.nasabahbanksampah.ui.beranda.BerandaFragment"
+        tools:layout="@layout/fragment_beranda">
+
+        <!-- Action untuk pindah ke InformasiHargaFragment -->
+        <action
+            android:id="@+id/action_beranda_to_informasiHarga"
+            app:destination="@id/informasiHargaFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_riwayat"
+        android:name="com.example.nasabahbanksampah.ui.riwayat.RiwayatFragment"
+        tools:layout="@layout/fragment_riwayat" />
+
+    <fragment
+        android:id="@+id/navigation_profil"
+        android:name="com.example.nasabahbanksampah.ui.profil.ProfilFragment"
+        tools:layout="@layout/fragment_profil" />
+
+
+    <fragment
+        android:id="@+id/tukarPoinFragment"
+        android:name="com.example.nasabahbanksampah.ui.tukarpoin.TukarPoinFragment"
+        android:label="Tukar Poin"
+        tools:layout="@layout/fragment_tukar_poin" />
+
+    <fragment
+        android:id="@+id/tukarTabunganFragment"
+        android:name="com.example.nasabahbanksampah.ui.tukarpoin.TukarTabunganFragment"
+        android:label="Tukar Tabungan" />
+
+    <fragment
+        android:id="@+id/tukarBarangFragment"
+        android:name="com.example.nasabahbanksampah.ui.tukarpoin.TukarBarangFragment"
+        android:label="Tukar Barang" />
+
+    <fragment
+        android:id="@+id/informasiHargaFragment"
+        android:name="com.example.nasabahbanksampah.ui.informasiharga.InformasiHargaFragment"
+        android:label="Informasi Harga"
+        tools:layout="@layout/fragment_informasi_harga" />
+
+    <fragment
+        android:id="@+id/transferFragment"
+        android:name="com.example.nasabahbanksampah.ui.transfer.TransferFragment"
+        android:label="Transfer" >
+        <action
+            android:id="@+id/action_transferFragment_to_transferFormFragment"
+            app:destination="@id/transferFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transferFormFragment"
+        android:name="com.example.nasabahbanksampah.ui.transfer.TransferFormFragment"
+        android:label="Form Transfer" >
+        <action
+            android:id="@+id/action_transferFormFragment_to_transferBerhasilFragment"
+            app:destination="@id/transferBerhasilFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transferBerhasilFragment"
+        android:name="com.example.nasabahbanksampah.ui.transfer.TransferBerhasilFragment"
+        android:label="Transfer Berhasil" >
+        <action
+            android:id="@+id/action_transferBerhasilFragment_to_berandaFragment"
+            app:destination="@id/navigation_beranda" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inputSampahFragment"
+        android:name="com.example.nasabahbanksampah.ui.inputsampah.InputSampahFragment"
+        android:label="Input Sampah"
+        tools:layout="@layout/fragment_input_sampah">
+        <action
+            android:id="@+id/action_inputSampahFragment_to_inputDetailFragment"
+            app:destination="@id/inputDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inputDetailFragment"
+        android:name="com.example.nasabahbanksampah.ui.inputsampah.InputDetailFragment"
+        android:label="Input Detail"
+        tools:layout="@layout/fragment_input_detail" />
+
+    <fragment
+        android:id="@+id/trackingPengangkutFragment"
+        android:name="com.example.nasabahbanksampah.ui.inputsampah.TrackingPengangkutFragment"
+        android:label="Tracking Pengangkut"
+        tools:layout="@layout/fragment_tracking_pengangkut" />
+
+</navigation>
