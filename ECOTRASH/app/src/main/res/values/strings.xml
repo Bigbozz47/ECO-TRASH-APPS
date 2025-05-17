@@ -58,4 +58,8 @@
     <string name="user_image_desc">Foto profil pengguna</string>
     <string name="notification_desc">Notifikasi</string>
     <string name="fab_help">Bantuan</string>
+
+    <string name="notifikasi_desc">Notifikasi</string>
+    <string name="profil_desc">Profil pengguna</string>
+    <string name="pengangkut_desc">Ikon pengangkut sampah</string>
 </resources>

@@ -1,25 +1,21 @@
 package com.example.nasabahbanksampah.ui.profil
 
-import android.content.Context
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.nasabahbanksampah.databinding.DialogEditProfileBinding
 import com.example.nasabahbanksampah.databinding.FragmentProfilBinding
-import okhttp3.*
-import org.json.JSONObject
-import java.io.IOException
 
 class ProfilFragment : Fragment() {
 
     private var _binding: FragmentProfilBinding? = null
     private val binding get() = _binding!!
-    private val client = OkHttpClient()
+    private lateinit var viewModel: ProfilViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,58 +23,75 @@ class ProfilFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfilBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        viewModel = ViewModelProvider(this)[ProfilViewModel::class.java]
 
-        // Fetch user profile
-        fetchUserProfile()
+        setupObservers()
+        setupEditButton()
 
-        return root
+        viewModel.fetchUserProfile(requireContext())
+
+        return binding.root
     }
 
-    private fun fetchUserProfile() {
-        val sharedPref = requireContext().getSharedPreferences("APP_PREF", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("access_token", null)
-
-        Log.d("DEBUG_TOKEN", "Token: $token")
-
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(requireContext(), "Token tidak ditemukan", Toast.LENGTH_SHORT).show()
-            return
+    private fun setupObservers() {
+        viewModel.username.observe(viewLifecycleOwner) {
+            binding.tvName.text = it
+            binding.userName.text = it
         }
 
-        val request = Request.Builder()
-            .url("http://10.0.2.2:8000/api/me/")
-            .addHeader("Authorization", "Bearer $token")
-            .build()
+        viewModel.email.observe(viewLifecycleOwner) {
+            binding.tvEmail.text = it
+        }
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                activity?.runOnUiThread {
-                    Toast.makeText(requireContext(), "Gagal koneksi: ${e.message}", Toast.LENGTH_SHORT).show()
+        viewModel.phone.observe(viewLifecycleOwner) {
+            binding.tvPhone.text = it
+        }
+
+        viewModel.address.observe(viewLifecycleOwner) {
+            binding.tvAddress.text = it
+        }
+
+        viewModel.role.observe(viewLifecycleOwner) {
+            binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            it?.let { message ->
+                if (isAdded) {
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
 
-            override fun onResponse(call: Call, response: Response) {
-                val bodyString = response.body?.string()
-                Log.d("DEBUG_FIRESTORE_BODY", bodyString ?: "null")
+    private fun setupEditButton() {
+        binding.btnEdit.setOnClickListener {
+            showEditProfileDialog()
+        }
+    }
 
-                if (!response.isSuccessful || bodyString == null) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(requireContext(), "Gagal memuat profil", Toast.LENGTH_SHORT).show()
-                    }
-                    return
-                }
+    private fun showEditProfileDialog() {
+        val dialogBinding = DialogEditProfileBinding.inflate(layoutInflater)
 
-                val json = JSONObject(bodyString)
-                val username = json.optString("username", "Pengguna")
-                val role = json.optString("role", "nasabah")
+        dialogBinding.etName.setText(binding.tvName.text)
+        dialogBinding.etPhone.setText(binding.tvPhone.text)
+        dialogBinding.etAddress.setText(binding.tvAddress.text)
 
-                activity?.runOnUiThread {
-                    binding.userName.text = username
-                    binding.userStatus.text = "• ${role.replaceFirstChar { it.uppercase() }}"
-                }
+        AlertDialog.Builder(requireContext())
+            .setTitle("Ubah Profil")
+            .setView(dialogBinding.root)
+            .setPositiveButton("Simpan") { _, _ ->
+                val newPhone = dialogBinding.etPhone.text.toString()
+                val newAddress = dialogBinding.etAddress.text.toString()
+
+                viewModel.updateProfile(
+                    requireContext(),
+                    phone = newPhone,
+                    address = newAddress
+                )
             }
-        })
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     override fun onDestroyView() {

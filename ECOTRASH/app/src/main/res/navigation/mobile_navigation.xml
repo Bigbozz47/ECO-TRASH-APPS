@@ -93,5 +93,10 @@
         android:label="Input Detail"
         tools:layout="@layout/fragment_input_detail" />
 
+    <fragment
+        android:id="@+id/trackingPengangkutFragment"
+        android:name="com.example.nasabahbanksampah.ui.inputsampah.TrackingPengangkutFragment"
+        android:label="Tracking Pengangkut"
+        tools:layout="@layout/fragment_tracking_pengangkut" />
 
 </navigation>

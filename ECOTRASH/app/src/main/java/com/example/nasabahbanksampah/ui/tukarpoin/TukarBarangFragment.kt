@@ -25,9 +25,35 @@ class TukarBarangFragment : Fragment() {
     ): View {
         _binding = FragmentTukarBarangBinding.inflate(inflater, container, false)
 
+        binding.btnKebutuhanPokok.setOnClickListener {
+            showConfirmationDialog("Kebutuhan Pokok")
+        }
+
+        binding.btnKebutuhanRT.setOnClickListener {
+            showConfirmationDialog("Kebutuhan Rumah Tangga")
+        }
+
+        binding.btnKebutuhanATK.setOnClickListener {
+            showConfirmationDialog("Kebutuhan ATK")
+        }
+
         fetchUserProfile()
 
         return binding.root
+    }
+
+    private fun showConfirmationDialog(jenis: String) {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Konfirmasi Penukaran")
+        builder.setMessage("Apakah Anda yakin ingin menukar poin untuk $jenis?")
+        builder.setPositiveButton("Ya") { _, _ ->
+            val dialog = NotifikasiBerhasilFragment(jenis)
+            dialog.show(parentFragmentManager, "NotifikasiBerhasil")
+        }
+        builder.setNegativeButton("Tidak") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     private fun fetchUserProfile() {

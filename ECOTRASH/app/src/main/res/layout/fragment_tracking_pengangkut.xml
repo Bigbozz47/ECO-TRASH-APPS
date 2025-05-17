@@ -1,66 +1,128 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F2F2F2">
 
-    <!-- Nama & Status -->
+    <!-- Header Hijau -->
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/dark_green"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delano Yusuf Habibie"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● Nasabah"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/notificationContainer"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp">
+
+            <ImageView
+                android:id="@+id/notification_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_notification"
+                android:background="@drawable/circle_background"
+                android:padding="6dp"
+                android:contentDescription="@string/notifikasi_desc" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_red_dot" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_toStartOf="@id/notificationContainer"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_profile"
+            android:background="@drawable/circle_background"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/profil_desc" />
+    </RelativeLayout>
+
+    <!-- Dummy Konten -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="top"
-        android:padding="16dp">
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delano Yusuf Habibie"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/userStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="● Nasabah"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <!-- MapView -->
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- Info Pengangkut -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:elevation="8dp"
-        android:padding="16dp">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_truck"
+            android:contentDescription="@string/pengangkut_desc" />
 
         <TextView
             android:id="@+id/tvNamaPengangkut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama: Budi Santoso"
+            android:text="Nama: -"
+            android:textSize="18sp"
             android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:id="@+id/tvPlat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plat: -"
+            android:layout_marginTop="8dp"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tvEstimasi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Plat: B 1234 XYZ" />
+            android:text="Estimasi tiba: -"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp" />
 
-        <TextView
+        <Button
+            android:id="@+id/btnKembali"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Estimasi tiba: 5 menit" />
+            android:text="Kembali"
+            android:layout_margin="12dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

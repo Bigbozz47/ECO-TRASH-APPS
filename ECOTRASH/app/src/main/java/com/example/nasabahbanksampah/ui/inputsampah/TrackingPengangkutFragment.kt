@@ -8,48 +8,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.nasabahbanksampah.R
 import com.example.nasabahbanksampah.databinding.FragmentTrackingPengangkutBinding
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import androidx.navigation.fragment.findNavController
+import com.example.nasabahbanksampah.R
 
-class TrackingPengangkutFragment : Fragment(), OnMapReadyCallback {
+class TrackingPengangkutFragment : Fragment() {
 
-    private lateinit var mapView: MapView
-    private lateinit var googleMap: GoogleMap
     private var _binding: FragmentTrackingPengangkutBinding? = null
     private val binding get() = _binding!!
     private val client = OkHttpClient()
-
-    private val dummyUserLocation = LatLng(-6.200000, 106.816666) // Jakarta
-    private val dummyDriverLocation = LatLng(-6.202000, 106.818000) // Dekat Jakarta
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_tracking_pengangkut, container, false)
-
-        // Binding for user profile
         _binding = FragmentTrackingPengangkutBinding.inflate(inflater, container, false)
 
-        mapView = view.findViewById(R.id.mapView)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
-
-        // Fetch user profile data
         fetchUserProfile()
 
-        return view
+        // Set data dummy
+        binding.tvNamaPengangkut.text = "Nama: Budi Santoso"
+        binding.tvPlat.text = "Plat: B 1234 XYZ"
+        binding.tvEstimasi.text = "Estimasi tiba: 5 menit"
+
+        binding.btnKembali.setOnClickListener {
+            findNavController().navigate(R.id.navigation_beranda)
+        }
+
+        return binding.root
     }
 
     private fun fetchUserProfile() {
@@ -98,46 +87,8 @@ class TrackingPengangkutFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        // Tambah marker user
-        googleMap.addMarker(MarkerOptions().position(dummyUserLocation).title("Lokasi Anda"))
-
-        // Tambah marker pengangkut
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(dummyDriverLocation)
-                .title("Pengangkut Sampah")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )
-
-        // Zoom ke tengah
-        val bounds = LatLngBounds.builder()
-            .include(dummyUserLocation)
-            .include(dummyDriverLocation)
-            .build()
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
     }
 }

@@ -1,136 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    tools:context=".ui.profil.ProfilFragment">
+    android:layout_height="match_parent">
 
-    <!-- Header: Nama & Status -->
-    <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    <!-- Header Hijau -->
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/dark_green"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/userName"
+        <!-- Nama & Status -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delano Yusuf Habibie"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_alignParentStart="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/userStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="● Nasabah"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delano Yusuf Habibie"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="18sp" />
 
-    <!-- Title Profil -->
-    <TextView
-        android:id="@+id/text_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profil"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#333333"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● Nasabah"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-    <!-- Foto Profil -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/profileCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="60dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/text_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Notifikasi (kanan atas) -->
+        <RelativeLayout
+            android:id="@+id/notificationContainer"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp">
 
+            <ImageView
+                android:id="@+id/notification_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_notification"
+                android:background="@drawable/circle_background"
+                android:padding="6dp"
+                android:contentDescription="Notifikasi" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_red_dot" />
+        </RelativeLayout>
+
+        <!-- Foto Profil (sebelah kiri notifikasi) -->
         <ImageView
-            android:id="@+id/profile_picture"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/user_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_toStartOf="@id/notificationContainer"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentTop="true"
             android:src="@drawable/ic_profile"
+            android:background="@drawable/circle_background"
+            android:padding="4dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/foto_profil"
-            android:onClick="updateProfilePicture" />
-    </androidx.cardview.widget.CardView>
+            android:contentDescription="Profil" />
+    </RelativeLayout>
 
-    <!-- Informasi Pengguna -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/infoCard"
+    <!-- Konten scroll -->
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/profileCard"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/header_container"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:background="@color/dark_green"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="24dp"
             android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/textName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/delano_yusuf_habibie"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:textStyle="bold" />
+            <!-- Foto Profil -->
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/sample_profile"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_background"
+                android:padding="4dp" />
 
+            <!-- Nama -->
             <TextView
-                android:id="@+id/textPhone"
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_handphone"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/white" />
+                android:text="Ecotrash"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="#000000" />
 
+            <!-- Email -->
             <TextView
-                android:id="@+id/textAddress"
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/alamat"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/white" />
+                android:text="ecotrash@gmail.com"
+                android:textSize="16sp"
+                android:textColor="#888888" />
 
-            <TextView
-                android:id="@+id/textBank"
-                android:layout_width="wrap_content"
+            <!-- No HP -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/nama_bank"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/white" />
+                android:gravity="start|center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_phone" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvPhoneLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nomor Handphone"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0822-2222-2222"
+                        android:textSize="16sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Alamat -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvAddressLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Alamat"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jalan Prof. Dr. Hamka, Air Tawar Padang"
+                        android:textSize="16sp"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Tombol Ubah -->
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubah Profil"
+                android:layout_marginTop="32dp" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
