@@ -155,10 +155,12 @@ class ValidasiSetoranView(generics.RetrieveUpdateAPIView):
     serializer_class = TransactionDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
+    @swagger_auto_schema(operation_summary="Validasi setoran (ubah status jadi selesai dan update poin/saldo)")
     def post(self, request, *args, **kwargs):
         trans = self.get_object()
         nilai = trans.berat * trans.jenis.harga_per_kg
         poin = int(trans.berat * trans.jenis.poin_per_kg)
+
         trans.status = 'selesai'
         trans.nilai_transaksi = nilai
         trans.poin = poin
@@ -170,19 +172,37 @@ class ValidasiSetoranView(generics.RetrieveUpdateAPIView):
         user.saldo += nilai
         user.save()
 
-        db.collection('transactions').document(str(trans.id)).set({
-            'user': user.username,
-            'email': user.email,
-            'jenis': trans.jenis.jenis,
-            'berat': float(trans.berat),
-            'nilai_transaksi': float(trans.nilai_transaksi),
-            'poin': trans.poin,
-            'status': trans.status,
-            'tanggal': trans.tanggal.isoformat(),
-            'divalidasi_oleh': request.user.username
-        })
+        try:
+            db.collection('transactions').document(str(trans.id)).set({
+                'user': user.username,
+                'email': user.email,
+                'jenis': trans.jenis.jenis,
+                'berat': float(trans.berat),
+                'nilai_transaksi': float(trans.nilai_transaksi),
+                'poin': trans.poin,
+                'status': trans.status,
+                'tanggal': trans.tanggal.isoformat(),
+                'divalidasi_oleh': request.user.username
+            })
+        except Exception as e:
+            # Rollback perubahan jika gagal simpan ke Firestore
+            trans.status = 'pending'
+            trans.save()
+
+            user.poin -= poin
+            user.saldo -= nilai
+            user.save()
+
+            return Response({'error': f'Gagal menyimpan ke Firestore, transaksi dibatalkan: {str(e)}'}, status=500)
 
         return Response(self.get_serializer(trans).data)
+
+class TotalSampahTerkumpulView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def get(self, request):
+        total_berat = Transaction.objects.filter(status='selesai').aggregate(total=Sum('berat'))['total'] or 0
+        return Response({"total_berat": total_berat})
 
 class RiwayatTransaksiView(generics.ListAPIView):
     serializer_class = TransactionDetailSerializer
@@ -329,6 +349,23 @@ class TukarPoinView(generics.CreateAPIView):
 class TransferSaldoView(generics.CreateAPIView):
     serializer_class = TransferSaldoSerializer
     permission_classes = [permissions.IsAuthenticated, IsNasabah]
+
+class AdminTransferSaldoView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def post(self, request, pk):
+        try:
+            trans = Transaction.objects.get(pk=pk, status='selesai')
+        except Transaction.DoesNotExist:
+            return Response({'error': 'Transaksi tidak ditemukan atau belum divalidasi'}, status=404)
+
+        user = trans.user
+        user.poin += trans.poin
+        user.saldo += trans.nilai_transaksi
+        user.save()
+
+        return Response({'status': 'Saldo dan Poin berhasil ditransfer'})
+
 
 class ExportLaporanView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsAdmin]

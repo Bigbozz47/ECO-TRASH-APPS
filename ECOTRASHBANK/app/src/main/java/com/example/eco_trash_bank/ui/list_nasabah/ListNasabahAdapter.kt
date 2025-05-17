@@ -13,10 +13,13 @@ class ListNasabahAdapter(
         fun bind(nasabah: Nasabah) {
             binding.tvName.text = nasabah.name
             binding.tvEmail.text = nasabah.email
+            binding.tvSaldo.text = "Saldo: Rp ${nasabah.saldo}"
+            binding.tvPoin.text = "Poin: ${nasabah.poin}"
             binding.btnDetail.setOnClickListener {
                 onDetailClick(nasabah)
             }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

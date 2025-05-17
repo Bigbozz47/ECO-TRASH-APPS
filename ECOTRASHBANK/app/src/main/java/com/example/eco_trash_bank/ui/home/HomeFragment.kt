@@ -66,6 +66,13 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewModel.fetchTotalSampah(requireContext())
+
+        viewModel.totalSampah.observe(viewLifecycleOwner) {
+            binding.tvPoin.text = "$it kg"
+        }
+
+
 
         return binding.root
     }

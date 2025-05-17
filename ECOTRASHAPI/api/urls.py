@@ -13,7 +13,7 @@ from .views import (
     list_nasabah, DetailNasabahByEmailView, NasabahListView,
 
     # Transaksi & Validasi
-    SetorSampahView, ValidasiSetoranView, DaftarSetoranBelumValidView, RiwayatTransaksiView,update_berat_terbaru, get_berat_terbaru,
+    SetorSampahView, ValidasiSetoranView, DaftarSetoranBelumValidView, RiwayatTransaksiView,update_berat_terbaru, get_berat_terbaru, TotalSampahTerkumpulView,
 
     # Harga Sampah
     HargaViewSet, HargaAktifView,
@@ -23,7 +23,7 @@ from .views import (
     ExportLaporanView, LaporanDownloadListView,
 
     # Poin & Transfer
-    TukarPoinView, TransferSaldoView,
+    TukarPoinView, TransferSaldoView, AdminTransferSaldoView,
 )
 
 # Swagger/OpenAPI documentation config
@@ -67,6 +67,7 @@ urlpatterns = [
     path('setor/', SetorSampahView.as_view(), name='setor_sampah'),
     path('validasi-setor/<int:pk>/', ValidasiSetoranView.as_view(), name='validasi_setoran'),
     path('validasi-setor/', DaftarSetoranBelumValidView.as_view(), name='daftar_validasi'),
+    path('total-sampah/', TotalSampahTerkumpulView.as_view(), name='total-sampah-terkumpul'),
     path('transaksi/', RiwayatTransaksiView.as_view(), name='riwayat_transaksi'),
     path('berat-terbaru/', update_berat_terbaru),
     path('get-berat-terbaru/', get_berat_terbaru),
@@ -84,4 +85,6 @@ urlpatterns = [
     # Poin & Transfer
     path('tukar-poin/', TukarPoinView.as_view(), name='tukar_poin'),
     path('transfer/', TransferSaldoView.as_view(), name='transfer_saldo'),
+    path('admin-transfer/<int:pk>/', AdminTransferSaldoView.as_view()),
+
 ]

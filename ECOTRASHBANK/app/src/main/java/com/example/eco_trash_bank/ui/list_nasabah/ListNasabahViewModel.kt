@@ -63,8 +63,12 @@ class ListNasabahViewModel : ViewModel() {
                         val username = obj.optString("username", "-")
                         val email = obj.optString("email", "-")
                         val profileImage = obj.optString("profile_image_url", "")
-                        result.add(Nasabah(username, email, profileImage))
+                        val saldo = obj.optInt("saldo", 0)
+                        val poin = obj.optInt("poin", 0)
+
+                        result.add(Nasabah(username, email, profileImage, saldo, poin))
                     }
+
 
                     _nasabahList.postValue(result)
 

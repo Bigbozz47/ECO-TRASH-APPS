@@ -34,6 +34,26 @@
             android:textColor="@color/black"
             android:layout_marginTop="4dp" />
 
+        <TextView
+            android:id="@+id/tvSaldo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saldo: Rp 0"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvPoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poin: 0"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="2dp" />
+
+
+
         <!-- Tombol Detail -->
         <Button
             android:id="@+id/btnDetail"

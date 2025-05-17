@@ -97,9 +97,9 @@ class ValidationViewModel : ViewModel() {
                         SetoranModel(
                             id = obj.getInt("id"),
                             nama_nasabah = obj.getString("nama_nasabah"),
-                            jumlah_sampah = obj.getDouble("jumlah"),
+                            jumlah_sampah = obj.optDouble("jumlah_sampah", 0.0),
                             kategori = obj.getString("kategori"),
-                            poin = obj.getInt("poin")
+                            poin = obj.optInt("poin", 0)
                         )
                     )
                 }
