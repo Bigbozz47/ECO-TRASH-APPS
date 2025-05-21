@@ -157,7 +157,7 @@
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_menu.xml">
         <config>
-          <theme>@style/Theme.ECOTRASH</theme>
+          <theme>@style/Theme.NasabahBankSampah</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/navigation/mobile_navigation.xml">
@@ -177,38 +177,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="292e4173-b1e8-48a1-90a6-7e3e39453f15" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.9/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.9/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.9/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/navEditor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/navEditor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHAPI/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHAPI/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/home/HomeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/home/HomeFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/nasabahbanksampah/onboarding/OnboardingActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/nasabahbanksampah/onboarding/OnboardingActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ECOTRASHAPI/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHAPI/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/FormHargaFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/FormHargaFragment.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/HargaAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/HargaAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/HargaSampah.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/HargaSampah.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/InfoHargaFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/InfoHargaFragment.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/InfoHargaViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/InfoHargaViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/fragment_info_harga.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/fragment_info_harga.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/item_harga_sampah.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/item_subkategori_button.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/ListHargaAnorganikFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/ListHargaAnorganikFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/ListHargaOrganikFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/java/com/example/eco_trash_bank/ui/info_harga/ListHargaOrganikFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/fragment_form_harga.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/layout/fragment_form_harga.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/navigation/mobile_navigation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/navigation/mobile_navigation.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ECOTRASHBANK/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,7 +199,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\Acer Nitro\.android\avd\Medium_Phone_API_34.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=JBSWJFHI95BQJFT8)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -277,22 +258,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/ECO-TRASH-APPS/ECOTRASH&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;memory.settings&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Android App.NasabahBankSampah.app.executor": "Run",
+    "Android App.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/ECO-TRASH-APPS/ECOTRASH",
+    "settings.editor.selected.configurable": "memory.settings",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\ECO-TRASH-APPS\ECOTRASH\app\src\main\res\drawable" />
@@ -484,12 +466,12 @@
         </entry>
         <entry key="com.example.nasabahbanksampah">
           <value>
-            <CheckInfo lastCheckTimestamp="1747359594585" />
+            <CheckInfo lastCheckTimestamp="1747850057412" />
           </value>
         </entry>
         <entry key="com.example.nasabahbanksampah.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1747359594582" />
+            <CheckInfo lastCheckTimestamp="1747850057425" />
           </value>
         </entry>
       </map>

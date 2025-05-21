@@ -32,11 +32,24 @@ class FormHargaFragment : Fragment() {
     ): View {
         _binding = FragmentFormHargaBinding.inflate(inflater, container, false)
 
+        setupTitle()
         setupFormIfEdit()
         setupSaveButton()
         fetchUserProfile()
 
         return binding.root
+    }
+
+    private fun setupTitle() {
+        val kategori = args.kategori
+        val subKategori = args.subKategori
+
+        binding.title.text = when {
+            kategori.equals("organik", ignoreCase = true) -> "Form Harga Sampah Organik"
+            kategori.equals("anorganik", ignoreCase = true) && !subKategori.isNullOrBlank() -> "Form Harga Sampah Anorganik (${subKategori})"
+            kategori.equals("anorganik", ignoreCase = true) -> "Form Harga Sampah Anorganik"
+            else -> "Form Harga Sampah"
+        }
     }
 
     private fun setupFormIfEdit() {
@@ -52,6 +65,7 @@ class FormHargaFragment : Fragment() {
             binding.etJenis.setText("")
             binding.etHarga.setText("")
             binding.etPoin.setText("")
+            binding.btnSimpan.text = "Simpan"
         }
     }
 
@@ -60,7 +74,7 @@ class FormHargaFragment : Fragment() {
             val jenis = binding.etJenis.text.toString().trim()
             val harga = binding.etHarga.text.toString().toDoubleOrNull()
             val poin = binding.etPoin.text.toString().toIntOrNull()
-            val kategori = "anorganik"
+            val kategori = args.kategori
             val subKategori = args.subKategori ?: ""
 
             if (jenis.isEmpty() || harga == null || poin == null) {

@@ -28,7 +28,6 @@ class ListHargaAnorganikFragment : Fragment() {
     private val args: ListHargaAnorganikFragmentArgs by navArgs()
     private lateinit var viewModel: InfoHargaViewModel
     private lateinit var adapter: HargaAdapter
-    private val client = OkHttpClient()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,20 +36,29 @@ class ListHargaAnorganikFragment : Fragment() {
         viewModel = ViewModelProvider(this)[InfoHargaViewModel::class.java]
 
         setupRecyclerView()
-        observeViewModel()
         setupUI()
-
+        observeViewModel()
         fetchUserProfile()
+
+        // Hanya fetch harga sekali di sini
         viewModel.fetchHargaList(requireContext(), "anorganik", args.subKategori)
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh data setiap kembali ke fragment
+        viewModel.fetchHargaList(requireContext(), "anorganik", args.subKategori)
     }
 
     private fun setupRecyclerView() {
         adapter = HargaAdapter(
             onEditClick = { harga ->
                 val action = ListHargaAnorganikFragmentDirections
-                    .actionListHargaAnorganikFragmentToFormHargaFragment(harga, args.subKategori)
+                    .actionListHargaAnorganikFragmentToFormHargaFragment(
+                        harga, "anorganik", args.subKategori
+                    )
                 findNavController().navigate(action)
             },
             onDeleteClick = { harga -> showDeleteDialog(harga) }
@@ -66,9 +74,9 @@ class ListHargaAnorganikFragment : Fragment() {
         viewModel.role.observe(viewLifecycleOwner) {
             binding.userStatus.text = "• ${it.replaceFirstChar { c -> c.uppercase() }}"
         }
-        viewModel.hargaList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            filterSearch()
+        // Tampilkan data hasil filter/search (bukan submitList dobel)
+        viewModel.hargaList.observe(viewLifecycleOwner) { hargaList ->
+            adapter.submitList(hargaList)
         }
         viewModel.error.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
@@ -76,25 +84,23 @@ class ListHargaAnorganikFragment : Fragment() {
     }
 
     private fun setupUI() {
+        // Tombol tambah harga: navigasi ke form dengan argumen yang benar
         binding.btnTambahHarga.setOnClickListener {
             val action = ListHargaAnorganikFragmentDirections
-                .actionListHargaAnorganikFragmentToFormHargaFragment(null, args.subKategori)
+                .actionListHargaAnorganikFragmentToFormHargaFragment(
+                    null, "anorganik", args.subKategori
+                )
             findNavController().navigate(action)
-
         }
 
+        // Search field
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterSearch()
+                viewModel.filterHargaList(newText.orEmpty(), "anorganik")
                 return true
             }
         })
-    }
-
-    private fun filterSearch() {
-        val query = binding.searchView.query?.toString() ?: ""
-        viewModel.filterHargaList(query, "anorganik")
     }
 
     private fun showDeleteDialog(harga: HargaSampah) {
@@ -116,7 +122,7 @@ class ListHargaAnorganikFragment : Fragment() {
             .addHeader("Authorization", "Bearer $token")
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
+        OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 requireActivity().runOnUiThread {
                     Toast.makeText(requireContext(), "Gagal menghapus: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -145,7 +151,7 @@ class ListHargaAnorganikFragment : Fragment() {
             .addHeader("Authorization", "Bearer $token")
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
+        OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {}
 
             override fun onResponse(call: Call, response: Response) {

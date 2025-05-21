@@ -113,13 +113,14 @@ class InfoHargaViewModel : ViewModel() {
                             harga_per_kg = obj.getDouble("harga_per_kg"),
                             poin_per_kg = obj.optInt("poin_per_kg", obj.getDouble("harga_per_kg").toInt()),
                             kategori = obj.optString("kategori", "-"),
+                            sub_kategori = obj.optString("sub_kategori", ""), // pastikan ini diambil
                             is_active = obj.optBoolean("is_active", true)
                         )
                         list.add(data)
                     }
 
                     allHargaList = list
-                    _hargaList.postValue(list)
+                    _hargaList.postValue(list) // Update list yang ditampilkan
 
                 } catch (e: Exception) {
                     _error.postValue("Gagal parsing data: ${e.message}")
@@ -128,6 +129,7 @@ class InfoHargaViewModel : ViewModel() {
         })
     }
 
+    // Selalu filter berdasarkan allHargaList!
     fun filterHargaList(keyword: String, kategori: String? = null) {
         val filtered = allHargaList.filter {
             it.jenis.contains(keyword, ignoreCase = true) &&

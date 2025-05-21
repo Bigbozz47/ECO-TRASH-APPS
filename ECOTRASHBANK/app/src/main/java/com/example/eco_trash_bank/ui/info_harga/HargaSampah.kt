@@ -11,5 +11,6 @@ data class HargaSampah(
     val harga_per_kg: Double,
     val poin_per_kg: Int,
     val kategori: String,
+    val sub_kategori: String?,    // tambahkan jika belum ada!
     val is_active: Boolean
 ) : Parcelable

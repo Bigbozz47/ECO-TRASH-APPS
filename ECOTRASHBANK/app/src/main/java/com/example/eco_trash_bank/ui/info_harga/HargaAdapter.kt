@@ -1,6 +1,5 @@
 package com.example.eco_trash_bank.adapter
 
-import com.example.eco_trash_bank.model.HargaSampah
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eco_trash_bank.R
-import java.util.*
+import com.example.eco_trash_bank.model.HargaSampah
 
 class HargaAdapter(
     private val onEditClick: (HargaSampah) -> Unit,
@@ -16,23 +15,23 @@ class HargaAdapter(
 ) : RecyclerView.Adapter<HargaAdapter.HargaViewHolder>() {
 
     private var hargaList: List<HargaSampah> = listOf()
-    private var fullList: List<HargaSampah> = listOf()
 
     fun submitList(list: List<HargaSampah>) {
-        fullList = list
         hargaList = list
         notifyDataSetChanged()
     }
 
-    fun filterAndSort(query: String, sortBy: String, aktifOnly: Boolean) {
-        var filtered = fullList.filter {
+    /**
+     * Jika ingin filter dan sort dari Adapter (opsional, direkomendasikan lewat ViewModel saja),
+     * gunakan fungsi ini. Tetapi lebih baik ViewModel yang filter, adapter cukup submitList!
+     */
+    fun filterAndSort(query: String, sortBy: String = "", aktifOnly: Boolean = false) {
+        var filtered = hargaList.filter {
             it.jenis.contains(query, ignoreCase = true)
         }
-
         if (aktifOnly) {
             filtered = filtered.filter { it.is_active }
         }
-
         hargaList = when (sortBy) {
             "Nama" -> filtered.sortedBy { it.jenis.lowercase() }
             "Harga" -> filtered.sortedByDescending { it.harga_per_kg }
@@ -65,7 +64,6 @@ class HargaAdapter(
             tvNama.text = item.jenis
             tvHarga.text = "Rp ${item.harga_per_kg.toInt()} /kg"
             tvPoin.text = "${item.poin_per_kg} poin /kg"
-
             btnEdit.setOnClickListener { onEditClick(item) }
             btnDelete.setOnClickListener { onDeleteClick(item) }
         }

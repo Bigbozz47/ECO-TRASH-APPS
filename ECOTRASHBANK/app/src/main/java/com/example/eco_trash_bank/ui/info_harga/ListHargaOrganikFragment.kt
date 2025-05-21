@@ -29,6 +29,12 @@ class ListHargaOrganikFragment : Fragment() {
     private lateinit var adapter: HargaAdapter
     private val client = OkHttpClient()
 
+    override fun onResume() {
+        super.onResume()
+        // Selalu fetch data terbaru saat fragment kembali aktif
+        viewModel.fetchHargaList(requireContext(), "organik")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -49,8 +55,13 @@ class ListHargaOrganikFragment : Fragment() {
         adapter = HargaAdapter(
             onEditClick = { harga ->
                 val action = ListHargaOrganikFragmentDirections
-                    .actionListHargaOrganikFragmentToFormHargaFragment(harga, null)
+                    .actionListHargaOrganikFragmentToFormHargaFragment(
+                        harga,      // hargaData
+                        "organik",  // kategori
+                        null        // subKategori
+                    )
                 findNavController().navigate(action)
+
             }
             ,
             onDeleteClick = { harga -> showDeleteDialog(harga) }
@@ -68,8 +79,8 @@ class ListHargaOrganikFragment : Fragment() {
         }
         viewModel.hargaList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-            filterSearch()
         }
+
         viewModel.error.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
@@ -77,13 +88,21 @@ class ListHargaOrganikFragment : Fragment() {
 
     private fun setupUI() {
         binding.btnTambahHarga.setOnClickListener {
-            findNavController().navigate(R.id.action_listHargaOrganikFragment_to_formHargaFragment)
+            val action = ListHargaOrganikFragmentDirections
+                .actionListHargaOrganikFragmentToFormHargaFragment(
+                    null,       // hargaData (tambah baru)
+                    "organik",  // kategori
+                    null        // subKategori
+                )
+            findNavController().navigate(action)
+
+
         }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterSearch()
+                viewModel.filterHargaList(newText.orEmpty(), "anorganik")
                 return true
             }
         })

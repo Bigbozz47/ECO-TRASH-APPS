@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.nasabahbanksampah.databinding.ActivityOnboardingBinding
 import com.example.nasabahbanksampah.main.MainActivity
 import com.example.nasabahbanksampah.R
+import com.example.nasabahbanksampah.auth.LoginActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class OnboardingActivity : AppCompatActivity() {
@@ -81,7 +82,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun launchMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }

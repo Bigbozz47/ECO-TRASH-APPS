@@ -88,12 +88,15 @@
             android:name="hargaData"
             app:argType="com.example.eco_trash_bank.model.HargaSampah"
             app:nullable="true" />
-
+        <argument
+            android:name="kategori"
+            app:argType="string" /> <!-- Tambahkan baris ini -->
         <argument
             android:name="subKategori"
             app:argType="string"
             app:nullable="true" />
     </fragment>
+
 
 
     <fragment
