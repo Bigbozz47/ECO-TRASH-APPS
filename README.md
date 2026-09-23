@@ -164,6 +164,10 @@ Tersedia file seeder untuk mengisi:
 
 ## 🛠️ PANDUAN INSTALASI & CARA MENJALANKAN APLIKASI
 
+
+https://github.com/user-attachments/assets/f274d754-c7bb-4052-938e-dc170a7237a4
+
+
 ### 🔧 Backend
 ```bash
 git clone https://github.com/username/eco-trash-bank.git
